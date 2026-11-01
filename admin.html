@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; upgrade-insecure-requests; script-src 'sha256-YEzilCukEln78s7B4AekZyXn7whYcGPmzVwdJ0o8CIY='; img-src 'self' data: blob:; connect-src 'self' https://api.github.com https://api-metrika.yandex.net; frame-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; upgrade-insecure-requests; script-src 'sha256-9/lE1qLPo6YmdBt0Uj8nVX6XJLHJSPpsy7sngsdVqGw='; img-src 'self' data: blob:; connect-src 'self' https://api.github.com https://api-metrika.yandex.net; frame-src 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Админка сайта</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -236,7 +236,8 @@
     { id: 'dxPhases', title: 'Схема: этапы', path: 'distraction.phases', list: true, item: 'Этап', titleKey: 'title', fields: [
       F('title', 'Название для родителей'), F('text', 'Текст для родителей', 'area'), F('titlePro', 'Название для коллег'), F('textPro', 'Текст для коллег', 'area')] },
     { id: 'meta', title: 'Ссылки в шапке', path: 'meta', fields: [F('handle', 'Ник в шапке'), F('telegram', 'Telegram', 'url'), F('instagram', 'Instagram', 'url'),
-      F('metrika', 'Номер счётчика Яндекс Метрики', 'text', { sub: 'Только цифры, например 98765432. Пусто — посещения не считаются. Подробнее — в разделе «Статистика»' })] },
+      F('metrika', 'Номер счётчика Яндекс Метрики', 'text', { sub: 'Только цифры, например 98765432. Пусто — посещения не считаются. Подробнее — в разделе «Статистика»' }),
+      F('metaNotice', 'Пояснение о Meta к слову Instagram', 'area', { sub: 'Всплывает при наведении на Instagram везде на сайте; у слова появляется «*». Пусто — пояснения и звёздочки нет' })] },
     { g: 'Обо мне' },
     { id: 'about', title: 'О себе', path: 'about', fields: [F('heading', 'Заголовок'), F('text', 'Текст', 'area')] },
     { id: 'facts', title: 'Факты', path: 'about.facts', list: true, item: 'Факт', titleKey: 'label', fields: [F('label', 'Название'), F('value', 'Значение')] },
