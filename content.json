@@ -633,12 +633,12 @@
       "url": "https://t.me/SHAPOVALOV_DR"
     },
     {
-      "label": "Instagram",
+      "label": "*Instagram",
       "value": "@dr__shapovalov",
       "url": "https://www.instagram.com/dr__shapovalov/"
     },
     {
-      "label": "X",
+      "label": "*X",
       "value": "@dr_shapovalov",
       "url": "https://x.com/dr_shapovalov"
     }
@@ -686,6 +686,6 @@
     }
   ],
   "footer": {
-    "note": "Информация на сайте носит ознакомительный характер и не заменяет очную консультацию врача.\nДеятельность Meta (соцсети Facebook и Instagram) запрещена в России как экстремистская"
+    "note": "Информация на сайте носит ознакомительный характер и не заменяет очную консультацию врача.\n\n*Деятельность Meta (соцсети Facebook и Instagram) запрещена в России как экстремистская"
   }
 }
