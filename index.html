@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; upgrade-insecure-requests; script-src 'self' 'sha256-bkUmR9VZfOcqdJjxg/NbwRGn8lr7XS3MPU7PvvZeSDw=' https://mc.yandex.ru https://mc.yandex.com https://yastatic.net; img-src 'self' data: blob: https://mc.yandex.ru https://mc.yandex.com; connect-src 'self' https://mc.yandex.ru https://mc.yandex.com; frame-src https://yandex.ru blob: https://mc.yandex.ru https://mc.yandex.com; child-src blob: https://mc.yandex.ru https://mc.yandex.com">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; upgrade-insecure-requests; script-src 'self' 'sha256-xjPg3GouOrAOWgIu4yLnpCj/Ha7hcehtylz9yaUF+9s=' https://mc.yandex.ru https://mc.yandex.com https://yastatic.net; img-src 'self' data: blob: https://mc.yandex.ru https://mc.yandex.com; connect-src 'self' https://mc.yandex.ru https://mc.yandex.com; frame-src https://yandex.ru blob: https://mc.yandex.ru https://mc.yandex.com; child-src blob: https://mc.yandex.ru https://mc.yandex.com">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Dr. Shapovalov</title>
 <meta name="description" content="Павел Шаповалов — кандидат медицинских наук, челюстно-лицевой хирург детского отделения ФГБУ НМИЦ «ЦНИИСиЧЛХ», Москва.">
@@ -1404,8 +1404,9 @@
     if (YM || PREVIEW || parent !== window || !/^\d{5,12}$/.test(String(id || ''))) return;
     YM = +id;
     window.ym = window.ym || function () { (window.ym.a = window.ym.a || []).push(arguments); }; window.ym.l = +new Date();
-    const sc = document.createElement('script'); sc.async = true; sc.src = 'https://mc.yandex.ru/metrika/tag.js'; document.head.append(sc);
-    window.ym(YM, 'init', { clickmap: true, trackLinks: true, accurateTrackBounce: true, webvisor: false });
+    // как в коде, который выдаёт Метрика для этого счётчика (tag.js?id=…, ssr, referrer, url); ecommerce и вебвизор не нужны
+    const sc = document.createElement('script'); sc.async = true; sc.src = 'https://mc.yandex.ru/metrika/tag.js?id=' + YM; document.head.append(sc);
+    window.ym(YM, 'init', { ssr: true, clickmap: true, trackLinks: true, accurateTrackBounce: true, referrer: document.referrer, url: location.href, webvisor: false });
     $('foot-ym').hidden = false;
   }
   // вкладки сайта считаются как отдельные страницы: видно, какие разделы смотрят
