@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; upgrade-insecure-requests; script-src 'sha256-1LRxiqTrD6O7cCO9yR4u9ehrySz/umrzJ21l3dzDODU='; img-src 'self' data: blob:; connect-src 'self' https://api.github.com https://api-metrika.yandex.net; frame-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; upgrade-insecure-requests; script-src 'sha256-YEzilCukEln78s7B4AekZyXn7whYcGPmzVwdJ0o8CIY='; img-src 'self' data: blob:; connect-src 'self' https://api.github.com https://api-metrika.yandex.net; frame-src 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Админка сайта</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -546,7 +546,7 @@
     }
     out.innerHTML = ''; ymErr.set('');
     const t = (total.totals || []);
-    const dur = t[4] || 0;
+    const dur = Math.round(t[4] || 0);                    // сначала округляем секунды, иначе бывает «6:60»
     out.append(el('div', { className: 'kpis' }, ...[
       [fmt(t[0] || 0), 'визиты'], [fmt(t[1] || 0), 'посетители'], [fmt(t[2] || 0), 'просмотры страниц'],
       [(t[3] || 0).toFixed(1).replace('.', ',') + '%', 'отказы'], [`${Math.floor(dur / 60)}:${String(Math.round(dur % 60)).padStart(2, '0')}`, 'время на сайте, мин:с'],
