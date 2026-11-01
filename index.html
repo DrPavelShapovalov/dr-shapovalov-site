@@ -1,0 +1,1336 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; upgrade-insecure-requests; script-src 'self' 'sha256-rAk8jTjYaph5Se8hh1fj1Qi+sNqVvONmTap0ag6gZAk='; img-src 'self' data: blob:; connect-src 'self'; frame-src https://yandex.ru">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Dr. Shapovalov</title>
+<meta name="description" content="Павел Шаповалов — кандидат медицинских наук, челюстно-лицевой хирург детского отделения ФГБУ НМИЦ «ЦНИИСиЧЛХ», Москва.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;500;700&family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+  /* Layout: a dark clinical instrument. Emerald wave field behind the hero, slow emerald/gold light
+     drifting under the whole page so every panel reads as liquid glass, gold for anything measured,
+     millimetres set in mono like readings on a device. One deliberate dark world.
+     All text comes from content.json; the admin panel edits that file. */
+  :root{
+    --void:#05080a;
+    --deep:#0a1513;
+    --emerald:#164236;
+    --ivory:#ede8de;
+    --mist:#93a19b;
+    --soft:#c3ccc8;
+    --line:rgba(237,232,222,.12);
+    --gold:#d6b266;
+    --gold-hi:#f0d48e;
+    --gold-lo:#a77e34;
+    --todo:#e6c987;
+    --display:'Unbounded','Arial Black',system-ui,sans-serif;
+    --text:'Manrope','Segoe UI',system-ui,-apple-system,sans-serif;
+    --mono:var(--text);   /* одна гарнитура для текста: моноширинный шрифт не используется */
+    color-scheme:dark;
+  }
+  /* lenis.css 1.3.27 (MIT), встроен: внешние стили в Artifact запрещены */
+  html.lenis, html.lenis body{height:auto}
+  .lenis:not(.lenis-autoToggle).lenis-stopped{overflow:clip}
+  .lenis [data-lenis-prevent]{overscroll-behavior:contain}
+  .lenis.lenis-smooth iframe{pointer-events:none}
+
+  *{box-sizing:border-box}
+  html{background:var(--void)}
+  body{background:var(--void); color:var(--ivory); font-family:var(--text); font-size:16px; line-height:1.6;
+    padding-inline:20px; padding-block:0 32px; -webkit-font-smoothing:antialiased; overflow-x:clip}
+  a{color:inherit; text-decoration:none}
+  :focus-visible{outline:2px solid var(--gold); outline-offset:3px; border-radius:8px}
+  p{margin:0}
+  .wrap{max-width:1160px; margin:0 auto; position:relative; z-index:1}
+  h1,h2,h3{font-family:var(--display); margin:0; text-wrap:balance; letter-spacing:-.01em}
+  h2{font-weight:500; font-size:clamp(30px,4.4vw,52px); line-height:1.05}
+  h2 em,h2 strong{font-style:normal; font-weight:inherit; color:var(--gold)}
+  .label{margin:0 0 14px; font-family:var(--mono); font-size:12px;  color:var(--gold)}
+
+  /* ambient light under the whole page: what the glass refracts */
+  .ambient{position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden}
+  .ambient i{position:absolute; border-radius:50%; filter:blur(90px); opacity:.55}
+  .ambient i:nth-child(1){width:46vw; height:46vw; left:-12vw; top:30vh; background:#1b5a49}
+  .ambient i:nth-child(2){width:34vw; height:34vw; right:-8vw; top:8vh; background:#6b5420; opacity:.35}
+  .ambient i:nth-child(3){width:40vw; height:40vw; left:35vw; bottom:-18vw; background:#123a31}
+
+  /* liquid glass */
+  .glass{
+    --mx:30%; --my:0%;
+    position:relative; border-radius:26px; isolation:isolate;
+    background:
+      radial-gradient(420px circle at var(--mx) var(--my), rgba(240,212,142,.10), transparent 60%),
+      linear-gradient(165deg, rgba(255,255,255,.09), rgba(255,255,255,.015) 38%, rgba(255,255,255,0) 60%),
+      rgba(12,26,23,.42);
+    border:1px solid rgba(237,232,222,.13);
+    backdrop-filter:blur(22px) saturate(1.6); -webkit-backdrop-filter:blur(22px) saturate(1.6);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.16), inset 0 -1px 0 rgba(0,0,0,.35), 0 30px 60px -38px rgba(0,0,0,.85);
+  }
+  .glass::before{content:""; position:absolute; inset:0; border-radius:inherit; padding:1px; pointer-events:none; z-index:-1;
+    background:linear-gradient(140deg, rgba(255,255,255,.35), rgba(255,255,255,0) 30%, rgba(255,255,255,0) 70%, rgba(214,178,102,.35));
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask-composite:exclude}
+
+  /* nav */
+  .nav{position:fixed; z-index:30; left:50%; transform:translateX(-50%);
+    top:calc(env(safe-area-inset-top,0px) + 14px); width:min(1120px, calc(100% - 32px));
+    display:flex; align-items:center; justify-content:space-between; gap:16px; padding:10px 12px 10px 18px; border-radius:999px}
+  .brand{display:flex; align-items:center; gap:10px; font-family:var(--mono); font-size:13px}
+  .brand svg{width:26px; height:26px; color:var(--gold)}
+  .links{display:flex; gap:20px; font-size:15px; color:var(--mist)}
+  .links a{position:relative; padding-block:4px}
+  .links a::after{content:""; position:absolute; left:0; right:0; bottom:0; height:1px; background:var(--gold); transform:scaleX(0); transform-origin:left; transition:transform .35s}
+  .links a:hover{color:var(--ivory)} .links a:hover::after{transform:scaleX(1)}
+  .pill{display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border-radius:999px; font-weight:700; font-size:14px;
+    background:var(--gold); color:#140f06; transition:background-color .2s, transform .2s}
+  .pill:hover{background:var(--gold-hi); transform:translateY(-1px)}
+  .pill:active{transform:translateY(0) scale(.98)}
+  .ghost{display:inline-flex; align-items:center; gap:8px; padding:12px 20px; border-radius:999px; font-weight:700; font-size:14px;
+    border:1px solid var(--line); background:rgba(5,8,10,.35); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); transition:border-color .2s, color .2s}
+  .ghost:hover{border-color:var(--gold); color:var(--gold-hi)}
+
+  /* hero */
+  .hero{position:relative; margin-inline:-20px; min-height:min(94svh,900px); display:grid; align-items:end;
+    padding:140px 20px 72px; overflow:hidden; background:radial-gradient(120% 90% at 70% 30%, var(--emerald), var(--deep) 55%, var(--void))}
+  #waves{position:absolute; inset:0; z-index:0}
+  .hero::after{content:""; position:absolute; inset:auto 0 0 0; height:40%; z-index:1; background:linear-gradient(180deg,transparent,var(--void)); pointer-events:none}
+  .hero-in{position:relative; z-index:2; max-width:1160px; width:100%; margin:0 auto; display:grid; grid-template-columns:1.3fr .7fr; gap:40px; align-items:end}
+  .hero-in > *{min-width:0}
+  .hero h1{font-weight:300; font-size:clamp(30px,8.2vw,64px); line-height:1}
+  .hero h1 .given{white-space:nowrap}
+  .hero h1 b{display:block; font-weight:700; color:var(--gold)}
+  .lede{margin-top:22px; font-size:19px; color:#c9d2ce; max-width:46ch}
+  .actions{display:flex; flex-wrap:wrap; gap:12px; margin-top:28px}
+  .pill.big{padding:13px 22px; font-size:14px}
+  .card-id{padding:22px; display:flex; flex-direction:column; gap:16px; align-items:center; text-align:center}
+  .portrait{width:min(220px,100%); aspect-ratio:1; border-radius:50%; padding:4px; background:conic-gradient(from 210deg,var(--gold-hi),var(--gold-lo),var(--gold-hi),var(--gold-lo),var(--gold-hi))}
+  .portrait img{display:block; width:100%; height:100%; border-radius:50%; object-fit:cover; object-position:50% 30%; background:var(--deep)}
+  .signature{width:min(240px,100%); height:auto; display:block; margin-inline:auto}
+  .id-meta{font-family:var(--mono); font-size:14px; color:var(--mist); line-height:1.7}
+
+  /* огромные цифры: число на пол-экрана, единица золотом, подпись под ним */
+  .readings{display:grid; grid-template-columns:repeat(3,1fr); gap:32px; margin-top:80px; position:relative; z-index:3}
+  .reading{display:flex; flex-direction:column; gap:12px; min-width:0}
+  .val{font-family:var(--display); font-weight:700; font-size:clamp(96px,13vw,196px); line-height:.8; letter-spacing:-.05em; white-space:nowrap; font-variant-numeric:tabular-nums}
+  .val small{display:block; margin:18px 0 0 .06em; font-family:var(--text); font-size:20px; font-weight:700; letter-spacing:0; color:var(--gold)}
+  .val .arr{color:var(--gold)}
+  .reading .lbl{font-size:16px; color:var(--soft); max-width:28ch}
+
+  /* аудитория: родителям / коллегам */
+  .aud{position:relative; display:inline-flex; margin-top:26px; padding:4px; border-radius:999px; border:1px solid var(--line);
+    background:rgba(5,8,10,.45); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px)}
+  .aud button{position:relative; z-index:1; font:600 15px var(--text); color:var(--mist); background:none; border:0; padding:10px 18px; border-radius:999px; cursor:pointer; transition:color .25s}
+  .aud button[aria-checked="true"]{color:#140f06}
+  .aud-ink{position:absolute; z-index:0; top:4px; bottom:4px; left:4px; width:0; border-radius:999px; background:var(--gold)}
+  @media (hover:hover) and (pointer:fine){ .aud button[aria-checked="false"]:hover{color:var(--ivory)} }
+
+  /* дистракция при прокрутке */
+  .dx{position:relative; z-index:2; height:100svh; margin-top:110px}
+  .dx-pin{height:100%; display:grid; grid-template-columns:minmax(0,.72fr) minmax(0,1.28fr); grid-template-areas:"head fig" "read fig";
+    grid-template-rows:auto 1fr; column-gap:40px; row-gap:8px; align-content:center; padding-block:110px 40px}
+  .dx-head{grid-area:head; align-self:end}
+  .dx-head p{margin-top:16px; color:var(--soft); font-size:17px; max-width:44ch}
+  .dx-fig{grid-area:fig; margin:0; min-width:0; align-self:center}
+  .dx-svg{display:block; width:100%; height:auto; overflow:visible}
+  .dx-read{grid-area:read; align-self:start; min-width:0}
+  .dx-mm{margin-top:26px; font-family:var(--display); font-weight:700; font-size:clamp(64px,7.4vw,104px); line-height:.85; letter-spacing:-.04em; font-variant-numeric:tabular-nums; white-space:nowrap}
+  .dx-mm small{margin-left:12px; font-size:.28em; font-weight:500; letter-spacing:0; color:var(--gold)}
+  .dx-steps{list-style:none; margin:24px 0 0; padding:0; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px}
+  .dx-steps li{display:flex; flex-direction:column; gap:8px; font-size:13px; line-height:1.3; color:var(--mist); transition:color .25s}
+  .dx-steps li.on{color:var(--ivory)}
+  .dx-steps i{display:block; height:3px; border-radius:3px; background:rgba(237,232,222,.12); overflow:hidden}
+  .dx-steps i b{display:block; height:100%; background:var(--gold); transform-origin:left; transform:scaleX(var(--f,0))}
+  .dx-now{margin-top:18px; min-height:6.6em}
+  .dx-now b{display:block; font-family:var(--display); font-weight:500; font-size:20px; color:var(--gold-hi)}
+  .dx-now p{margin-top:6px; color:var(--soft); font-size:16px; max-width:46ch}
+  .dx-note{margin-top:10px; font-size:14px; color:var(--mist); max-width:52ch}
+  .dx-range{display:flex; flex-direction:column; gap:8px; margin-top:16px; font-size:14px; color:var(--mist)}
+  .dx-range input{width:100%; accent-color:var(--gold)}
+  .dx-svg .jaw .outline{fill:none; stroke:#4a3519; stroke-width:2.2; stroke-linejoin:round}
+  .dx-svg .hatch{fill:none; stroke:#5c4322; stroke-width:.8; opacity:.38}
+  .dx-svg .rough{fill:none; stroke:#5c4322; stroke-width:1.2; stroke-linecap:round; opacity:.5}
+  .dx-svg .ridge{fill:none; stroke:#fff6e2; stroke-width:2.4; stroke-linecap:round; opacity:.55}
+  .dx-svg .root path{fill:none; stroke:#6e5430; stroke-width:1.1; stroke-dasharray:3 3; opacity:.6}
+  .dx-svg .foramen{fill:#3a2810; stroke:#fff1d6; stroke-width:1; stroke-opacity:.5}
+  .dx-svg .enamel{fill:url(#jen); stroke:#5d4b2f; stroke-width:1.3; stroke-linejoin:round}
+  .dx-svg .shine{fill:none; stroke:#fff; stroke-width:1.6; stroke-linecap:round; opacity:.8}
+  .dx-svg .steel{fill:url(#jsteel); stroke:#2c3436; stroke-width:1.3}
+  .dx-svg .screw{fill:#2c3436; stroke:#d6dde0; stroke-width:1}
+  .dx-svg .dim{stroke:var(--gold-hi); stroke-width:1.4}
+  .dx-svg .dim-t{fill:var(--gold-hi); font:600 15px var(--text)}
+  .dx-svg .lbl-t{fill:var(--mist); font:500 13px var(--text)}
+
+  /* полноэкранное меню */
+  .burger{position:relative; width:44px; height:44px; flex:none; border-radius:50%; border:1px solid var(--line); background:rgba(5,8,10,.35); cursor:pointer; display:grid; place-items:center; color:var(--ivory)}
+  .burger span{position:absolute; left:13px; right:13px; height:1.6px; border-radius:2px; background:currentColor; transition:transform .3s cubic-bezier(.23,1,.32,1)}
+  .burger span:nth-child(1){transform:translateY(-4px)} .burger span:nth-child(2){transform:translateY(4px)}
+  .burger[aria-expanded="true"] span:nth-child(1){transform:rotate(45deg)} .burger[aria-expanded="true"] span:nth-child(2){transform:rotate(-45deg)}
+  .sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+  .nav-end{display:flex; align-items:center; gap:10px}
+  body.menu-open .nav{z-index:70}
+  .menu{position:fixed; inset:0; z-index:60; display:flex; flex-direction:column; overflow-y:auto; background:var(--void);
+    padding:calc(env(safe-area-inset-top,0px) + 110px) 28px calc(env(safe-area-inset-bottom,0px) + 32px)}
+  .menu-aura{position:fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none}
+  .menu-aura i{position:absolute; border-radius:50%; filter:blur(80px)}
+  .menu-aura i:nth-child(1){width:70vmax; height:70vmax; left:-25vmax; top:-20vmax; background:#17614c; opacity:.8}
+  .menu-aura i:nth-child(2){width:55vmax; height:55vmax; right:-20vmax; bottom:-25vmax; background:#7a5c1f; opacity:.7}
+  .menu-aura i:nth-child(3){width:45vmax; height:45vmax; left:30vw; top:35vh; background:#0d4a52; opacity:.75}
+  .menu-in{position:relative; width:min(1120px,100%); margin-inline:auto; display:flex; flex-direction:column; gap:clamp(12px,2.2vh,24px)}
+  .menu-in > a,.menu-group > a{font-family:var(--display); font-weight:500; font-size:clamp(24px,min(4.2vw,6.4vh),50px); line-height:1.05; letter-spacing:.16em; text-transform:uppercase; width:max-content; max-width:100%}
+  .menu-sub{list-style:none; margin:4px 0 6px; padding:0; display:grid; gap:12px}
+  .menu-sub a{display:inline-flex; align-items:center; gap:14px; font-size:clamp(15px,1.5vw,19px); font-weight:600; letter-spacing:.08em}
+  .orb{width:30px; height:30px; flex:none; border-radius:50%; background:radial-gradient(circle at 34% 30%, #f6e2a8, var(--o1,#2f8f72) 46%, #071a15 100%)}
+  .menu-sub li:nth-child(3n+2) .orb{--o1:#c99a3c} .menu-sub li:nth-child(3n) .orb{--o1:#1f6f7a}
+  .menu-foot{position:relative; width:min(1120px,100%); margin:auto auto 0; padding-top:36px; display:flex; flex-wrap:wrap; gap:12px 28px; font-size:16px; color:var(--soft)}
+  .menu-foot a{color:var(--ivory)}
+  @media (hover:hover) and (pointer:fine){ .menu a:hover{color:var(--gold-hi)} .burger:hover{border-color:var(--gold)} }
+
+  /* карта */
+  .map{margin-top:16px; display:grid; grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr); overflow:hidden; padding:0}
+  .map-frame{position:relative; min-height:360px; border-radius:26px 0 0 26px; overflow:hidden;
+    background:radial-gradient(60% 70% at 30% 30%, rgba(31,122,95,.55), transparent 70%), radial-gradient(50% 60% at 80% 80%, rgba(122,92,31,.45), transparent 70%), #07110f}
+  .map-frame iframe{position:absolute; inset:0; width:100%; height:100%; border:0; filter:invert(.92) hue-rotate(170deg) saturate(.65) brightness(.92)}
+  .map-frame.on::after{content:""; position:absolute; inset:0; pointer-events:none; background:rgba(22,90,70,.35); mix-blend-mode:color}
+  .map-pin{position:absolute; left:50%; top:50%; width:74px; transform:translate(-50%,-88%); color:var(--gold)}
+  .map-pin svg{display:block; width:100%; height:auto}
+  .map-ring{position:absolute; left:50%; top:50%; width:120px; height:40px; margin:-20px 0 0 -60px; border-radius:50%; border:1.5px solid rgba(214,178,102,.6)}
+  .map-frame.on .map-pin,.map-frame.on .map-ring{display:none}
+  .map-info{padding:32px 30px; display:flex; flex-direction:column; gap:14px; justify-content:center}
+  .map-info b{font-family:var(--display); font-weight:500; font-size:22px; line-height:1.25}
+  .map-info p{color:var(--soft)}
+  .map-acts{display:flex; flex-wrap:wrap; gap:10px; margin-top:6px}
+  .map-note{color:var(--gold-hi); font-size:15px}
+  @media (prefers-reduced-motion:no-preference){
+    .map-ring{animation:ping 2.4s cubic-bezier(.23,1,.32,1) infinite}
+    .aud-ink{transition:left .35s cubic-bezier(.23,1,.32,1), width .35s cubic-bezier(.23,1,.32,1)}
+    .menu-aura i:nth-child(1){animation:drift1 22s ease-in-out infinite alternate}
+    .menu-aura i:nth-child(2){animation:drift2 26s ease-in-out infinite alternate}
+    .menu-aura i:nth-child(3){animation:drift1 30s ease-in-out infinite alternate-reverse}
+  }
+  @keyframes ping{from{transform:scale(.4); opacity:1} to{transform:scale(1.4); opacity:0}}
+
+  .marquee{margin-inline:-20px; overflow:hidden; border-block:1px solid var(--line); padding-block:16px; margin-top:96px; position:relative; z-index:1}
+  .marquee-track{display:flex; width:max-content}
+  .marquee-track span{display:flex; align-items:center; gap:26px; padding-right:26px; white-space:nowrap; font-family:var(--mono); font-size:13px;  color:var(--mist)}
+  .marquee-track i{width:5px; height:5px; border-radius:50%; background:var(--gold); display:inline-block}
+
+  /* section tabs: one panel open at a time */
+  .tabbar-wrap{position:sticky; top:calc(env(safe-area-inset-top,0px) + 84px); z-index:20; display:flex; justify-content:center; margin-top:56px}
+  .tabbar{position:relative; display:flex; gap:2px; padding:6px; border-radius:999px; max-width:100%; overflow-x:auto; scrollbar-width:none}
+  .tabbar::-webkit-scrollbar{display:none}
+  .tabbar button{position:relative; z-index:1; flex:none; white-space:nowrap; font:600 15px var(--text); color:var(--mist); background:none; border:0;
+    padding:11px 20px; border-radius:999px; cursor:pointer; transition:color .35s}
+  .tabbar button:hover{color:var(--ivory)}
+  .tabbar button[aria-selected="true"]{color:#140f06}
+  .t-short{display:none}
+  .tab-ink{position:absolute; z-index:0; top:6px; bottom:6px; left:0; width:0; border-radius:999px;
+    background:var(--gold)}
+  .stage{padding-top:48px; min-height:70vh; scroll-margin-top:150px}
+  .tabpanel{scroll-margin-top:160px}
+  .sub-block{padding-top:96px; scroll-margin-top:160px}
+  .head{display:grid; grid-template-columns:1fr 1fr; gap:24px 56px; align-items:end; margin-bottom:44px}
+  .head > *{min-width:0}
+  .head p{color:var(--soft); max-width:52ch; font-size:17px}
+
+  .term{font:inherit; color:var(--ivory); background:none; border:0; padding:0; cursor:help; border-bottom:1px dashed var(--gold)}
+  .term:hover,.term[aria-expanded="true"]{color:var(--gold-hi)}
+  .tip{position:fixed; z-index:50; width:min(320px,calc(100vw - 32px)); padding:16px 18px; border-radius:18px; font-size:14px; line-height:1.5;
+    background:rgba(10,21,19,.9); border:1px solid rgba(214,178,102,.35); color:var(--ivory); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    opacity:0; transform:translateY(6px); transition:opacity .2s, transform .2s; pointer-events:none}
+  .tip.on{opacity:1; transform:none}
+  .tip b{display:block; font-family:var(--display); font-weight:500; font-size:16px; color:var(--gold-hi); margin-bottom:6px}
+  .todo{display:inline-block; padding:3px 10px; border-radius:8px; border:1px dashed var(--todo); color:var(--todo); background:rgba(214,178,102,.08); font-size:13px; font-weight:600}
+
+  /* about */
+  .about-grid{display:grid; grid-template-columns:1.1fr .9fr; gap:16px}
+  .about-grid > *{min-width:0}
+  .panel{padding:30px}
+  .panel h3{font-family:var(--display); font-weight:500; font-size:20px;  color:var(--gold); margin-bottom:18px}
+  .intro-text{color:var(--ivory); font-size:18px}
+  dl.facts{margin:22px 0 0; display:grid; grid-template-columns:max-content 1fr; border-top:1px solid var(--line)}
+  .facts dt,.facts dd{margin:0; padding:13px 0; border-bottom:1px solid var(--line)}
+  .facts dt{font-family:var(--mono); font-size:14px;  color:var(--mist); padding-right:24px; padding-top:16px}
+  .facts dd{min-width:0; font-size:16px}
+  .timeline{list-style:none; margin:0; padding:0; display:flex; flex-direction:column}
+  .timeline li{display:grid; grid-template-columns:96px 1fr; gap:16px; padding:14px 0; border-bottom:1px solid var(--line)}
+  .timeline li:last-child{border-bottom:0}
+  .timeline .y{font-family:var(--mono); font-size:15px; font-weight:600; font-variant-numeric:tabular-nums; color:var(--gold); padding-top:2px}
+  .timeline b{display:block; font-weight:600}
+  .timeline span{color:var(--soft); font-size:15px}
+  .courses{grid-column:1 / -1}
+  .course-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
+  .course{padding:18px; border-radius:18px; border:1px solid var(--line); background:rgba(255,255,255,.02); display:flex; flex-direction:column; gap:6px; min-width:0}
+  .course .y{font-family:var(--mono); font-size:14px; color:var(--gold)}
+  .course b{font-weight:600; line-height:1.35}
+  .course span{color:var(--soft); font-size:15px}
+
+  /* directions */
+  .dirs{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
+  .dir{padding:28px 26px; display:flex; flex-direction:column; gap:12px; min-width:0; transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+  .dir:hover{transform:translateY(-6px)}
+  .dir .idx{font-family:var(--mono); font-size:12px; color:var(--gold); letter-spacing:.14em}
+  .dir h3{font-weight:500; font-size:22px; line-height:1.15}
+  .dir p{color:var(--soft); font-size:16px}
+  .dir .go{margin-top:auto; padding-top:10px; font-size:15px; font-weight:700; color:var(--gold-hi)}
+
+  /* cases */
+  .cases{display:flex; flex-direction:column; gap:16px}
+  .case{display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr); gap:36px; padding:36px; scroll-margin-top:100px}
+  .case-text{display:flex; flex-direction:column; gap:16px; min-width:0}
+  .tags{display:flex; flex-wrap:wrap; gap:8px}
+  .tag{font-family:var(--mono); font-size:13px;  padding:5px 11px; border-radius:999px; border:1px solid var(--line); color:var(--mist)}
+  .tag:first-child{border-color:rgba(214,178,102,.45); color:var(--gold-hi)}
+  .case h3{font-weight:500; font-size:clamp(22px,2.6vw,30px); line-height:1.15}
+  .case ul{margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:10px}
+  .case li{position:relative; padding-left:22px; color:var(--ivory); font-size:17px}
+  .case li::before{content:""; position:absolute; left:0; top:.8em; width:12px; height:1px; background:var(--gold)}
+  .case li strong{color:var(--ivory); font-weight:600}
+  .viz{padding:26px; border-radius:20px; background:rgba(5,8,10,.5); border:1px solid var(--line); display:flex; flex-direction:column; gap:20px; min-width:0}
+  .viz .big{font-family:var(--display); font-weight:500; font-size:clamp(46px,6vw,76px); line-height:.95; font-variant-numeric:tabular-nums}
+  .viz .big small{font-family:var(--mono); font-size:15px; color:var(--gold); margin-left:8px}
+  .viz .big .arr{color:var(--gold); font-weight:300}
+  .viz .cap{font-size:14px; color:var(--mist); margin-top:-10px}
+  .bars{display:flex; flex-direction:column; gap:13px}
+  .bar{display:grid; grid-template-columns:104px 1fr 64px; gap:12px; align-items:center; font-size:14px}
+  .bar .n{color:var(--mist)} .bar .v{text-align:right; font-family:var(--mono)}
+  .rail{height:8px; border-radius:99px; background:rgba(237,232,222,.06); overflow:hidden}
+  .fill{display:block; height:100%; width:var(--w); border-radius:99px; transform-origin:left; background:rgba(214,178,102,.32)}
+  .fill.on{background:linear-gradient(90deg,var(--gold-lo),var(--gold-hi))}
+  .scale{display:grid; grid-template-columns:104px 1fr 64px; gap:12px; font-family:var(--mono); font-size:13px; color:var(--mist); font-variant-numeric:tabular-nums}
+  .scale .t{display:flex; justify-content:space-between}
+
+  /* steps */
+  .steps-wrap{display:grid; grid-template-columns:.8fr 1.2fr; gap:56px; align-items:start}
+  .steps-wrap > *{min-width:0}
+  .steps-intro{position:sticky; top:110px; display:flex; flex-direction:column; gap:18px}
+  .steps-intro p{color:var(--soft); font-size:17px}
+  .steps{position:relative; list-style:none; margin:0; padding:22px 24px}
+  .steps .rail-y,.steps .prog{position:absolute; left:45px; top:44px; bottom:44px; width:1px; background:var(--line)}
+  .steps .prog{background:linear-gradient(var(--gold-hi),var(--gold-lo)); transform-origin:top}
+  .step{position:relative; display:grid; grid-template-columns:44px 1fr; gap:18px; padding-block:10px}
+  .step .n{width:44px; height:44px; border-radius:50%; display:grid; place-items:center; position:relative; z-index:1;
+    background:var(--void); border:1px solid rgba(214,178,102,.5); color:var(--gold-hi); font-family:var(--mono); font-size:15px; font-weight:600}
+  .step p{align-self:center; min-width:0; font-size:17px}
+  .step p span{color:var(--mist)}
+
+  /* science */
+  .sci{display:grid; grid-template-columns:.95fr 1.05fr; gap:16px; align-items:start}
+  .sci > *{min-width:0}
+  .diss{padding:34px; display:flex; flex-direction:column; gap:18px; align-items:flex-start; position:sticky; top:110px}
+  .diss-top{display:flex; justify-content:space-between; align-items:flex-start; gap:18px; width:100%}
+  .diss-top .thumb{width:92px; flex:none}
+  .diss .deg{font-family:var(--mono); font-size:14px; font-weight:600;  color:var(--gold)}
+  .diss h3{font-weight:500; font-size:clamp(20px,2.2vw,26px); line-height:1.25}
+  .diss-sum{color:var(--ivory); font-size:17px; padding-left:14px; border-left:2px solid var(--gold)}
+  .diss dl{margin:0; display:grid; grid-template-columns:max-content 1fr; gap:8px 18px; font-size:16px}
+  .diss dt{color:var(--mist); font-family:var(--mono); font-size:14px;  padding-top:2px}
+  .diss dd{margin:0}
+  .pubs{display:flex; flex-direction:column; gap:12px}
+  .pub{padding:24px 26px; display:grid; grid-template-columns:auto 1fr; align-items:start; gap:18px; transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+  /* миниатюра титульной страницы у публикации */
+  .thumb{display:block; align-self:start; height:fit-content; max-height:max-content; width:84px; padding:0; border:0; border-radius:6px; background:#fff; cursor:zoom-in; overflow:hidden;
+    box-shadow:0 10px 24px -12px rgba(0,0,0,.8); transform-origin:50% 100%; transition:transform .3s cubic-bezier(.23,1,.32,1)}
+  .thumb img{display:block; width:100%; height:auto; aspect-ratio:var(--ar,.707); object-fit:cover; object-position:top; pointer-events:none}
+  .thumb.poster{width:96px; --ar:.633}
+  .thumb-cell{align-self:start; min-width:0}
+  @media (hover:hover) and (pointer:fine){ .thumb:hover{transform:rotate(-3deg) scale(1.06)} }
+  .pub .src a.lnk:hover{text-decoration:underline}
+  .pub.flash{box-shadow:0 0 0 2px var(--gold), 0 0 40px -8px rgba(214,178,102,.6)}
+
+  /* веер титульных страниц */
+  .fan-wrap{margin:-8px 0 40px}
+  .fan{--cw:clamp(80px,12vw,172px); position:relative; height:calc(var(--cw) * 1.414 + var(--cw) * .3 + 56px); margin-inline:auto; max-width:1000px}
+  .fan-card{position:absolute; left:50%; bottom:28px; width:var(--cw); padding:0; border:0; border-radius:7px; background:#fff; cursor:zoom-in;
+    overflow:hidden; transform-origin:50% 150%; box-shadow:0 18px 40px -18px rgba(0,0,0,.9), 0 2px 6px rgba(0,0,0,.35)}
+  .fan-card img{display:block; width:100%; aspect-ratio:.707; object-fit:cover; object-position:top}
+  .fan-hint{margin-top:4px; text-align:center; font-size:14px; color:var(--mist)}
+
+  /* просмотр страницы целиком */
+  .lb{position:fixed; inset:0; z-index:80; display:grid; place-items:center}
+  .lb-scrim{position:absolute; inset:0; background:rgba(3,6,6,.86); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px)}
+  .lb-in{position:relative; width:min(1100px,100%); max-height:100%; overflow:auto; overscroll-behavior:contain; display:grid; grid-template-columns:minmax(0,auto) minmax(0,320px);
+    gap:28px; align-items:start; padding:calc(env(safe-area-inset-top,0px) + 28px) 24px calc(env(safe-area-inset-bottom,0px) + 28px)}
+  .lb-fig{margin:0; justify-self:end}
+  .lb-fig img{display:block; max-width:100%; max-height:calc(100svh - 56px); width:auto; height:auto; border-radius:8px; background:#fff; box-shadow:0 30px 80px -30px #000}
+  .lb.tall .lb-fig img{max-height:none; width:min(760px,100%)}
+  .lb-cap{position:sticky; top:0; display:flex; flex-direction:column; gap:12px; padding-top:8px}
+  .lb-cap b{font-family:var(--display); font-weight:500; font-size:20px; line-height:1.3}
+  .lb-cap span{color:var(--soft); font-size:15px}
+  .lb-acts{display:flex; flex-wrap:wrap; gap:10px; margin-top:6px}
+  .lb-x{position:fixed; z-index:2; top:calc(env(safe-area-inset-top,0px) + 14px); right:calc(env(safe-area-inset-right,0px) + 14px); width:46px; height:46px; border-radius:50%;
+    border:1px solid var(--line); background:rgba(5,8,10,.7); color:var(--ivory); font-size:26px; line-height:1; cursor:pointer}
+  @media (max-width:760px){
+    .lb-in{grid-template-columns:1fr; gap:16px; padding-inline:16px; padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
+    .lb-fig{justify-self:center} .lb-fig img{max-height:none}
+    .lb-cap{position:static}
+  }  .pub .num{font-family:var(--display); font-weight:300; font-size:26px; color:var(--gold); line-height:1.1; font-variant-numeric:tabular-nums}
+  .pub b{display:block; font-weight:600; line-height:1.35; font-size:17px}
+  .pub .au{display:block; margin-top:8px; color:var(--soft); font-size:15px}
+  .pub .src{display:flex; flex-wrap:wrap; gap:6px 14px; margin-top:8px; font-family:var(--mono); font-size:14px; color:var(--mist)}
+  .pub .src .lnk{color:var(--gold-hi)}
+  .pub .num{min-width:2ch}
+  .tabs{display:flex; flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; gap:8px; margin-bottom:14px; padding:6px; border-radius:999px; width:max-content; max-width:100%;
+    background:rgba(12,26,23,.42); border:1px solid rgba(237,232,222,.13); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px)}
+  .tabs::-webkit-scrollbar{display:none}
+  .tabs button{flex:none; white-space:nowrap; font:inherit; font-size:15px; font-weight:600; color:var(--mist); background:none; border:0; cursor:pointer; padding:8px 14px; border-radius:999px; display:flex; gap:8px; align-items:center; transition:background .25s, color .25s}
+  .tabs button span{font-family:var(--mono); font-size:14px; color:var(--gold)}
+  .tabs button[aria-selected="true"]{background:var(--gold); color:#140f06}
+  .tabs button[aria-selected="true"] span{color:#140f06}
+  .profiles{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px}
+  .chip{display:inline-flex; flex-direction:column; gap:2px; padding:9px 14px; border-radius:14px; border:1px solid var(--line); background:rgba(255,255,255,.03); font-family:var(--mono); font-size:13px}
+  .chip small{font-size:13px;  color:var(--mist)}
+  a.chip:hover{border-color:var(--gold); color:var(--gold-hi)}
+  [hidden]{display:none!important}
+
+  /* work + contacts */
+  .work{padding:48px; display:grid; grid-template-columns:1.2fr .8fr; gap:36px; align-items:end;
+    background:radial-gradient(90% 120% at 100% 0%, rgba(22,66,54,.75), transparent 60%), rgba(12,26,23,.42)}
+  .work > *{min-width:0}
+  .work p{color:var(--soft); max-width:56ch; margin-top:14px}
+  .work-name{margin-top:22px; font-weight:500; font-size:clamp(20px,2.2vw,26px); line-height:1.2}
+  .work .side{display:flex; flex-direction:column; gap:12px; align-items:flex-start}
+  .contacts{display:grid; grid-template-columns:repeat(4,1fr); gap:14px}
+  .contact{padding:24px; display:flex; flex-direction:column; gap:28px; min-width:0; transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+  a.contact:hover{transform:translateY(-4px)}
+  .contact small{font-family:var(--mono); font-size:14px;  color:var(--mist)}
+  /* отзывы: только ссылки на независимые площадки, без цитат (ст. 24 закона «О рекламе») */
+  .rev-list{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr)); gap:16px}
+  .rev{padding:28px; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px 24px; min-width:0; transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+  .rev > div{min-width:0}
+  .rev small{display:block; font-size:15px; color:var(--mist)}
+  .rev b{display:block; margin-top:6px; font-family:var(--display); font-weight:500; font-size:clamp(24px,2.6vw,32px); line-height:1.1}
+  .rev .go{flex:none; padding:12px 18px; border-radius:999px; background:var(--gold); color:#140f06; font-weight:700; font-size:15px; white-space:nowrap}
+  @media (hover:hover) and (pointer:fine){ a.rev:hover{transform:translateY(-4px)} a.rev:hover .go{background:var(--gold-hi)} }
+  .contact span{font-family:var(--display); font-weight:500; font-size:18px; overflow-wrap:anywhere}
+
+  footer{padding-block:120px 0; position:relative; z-index:1}
+  .wordmark{font-family:var(--display); font-weight:300; text-align:center; white-space:nowrap; font-size:clamp(14px,4.6vw,60px);  color:var(--gold)}
+  .foot{margin-top:28px; padding-top:20px; border-top:1px solid var(--line); display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px; font-size:14px; color:var(--mist)}
+  .foot p{max-width:80ch}
+
+  @media (prefers-reduced-motion:no-preference){
+    .tab-ink{transition:left .5s cubic-bezier(.2,.8,.2,1), width .5s cubic-bezier(.2,.8,.2,1)}
+    .ambient i:nth-child(1){animation:drift1 28s ease-in-out infinite alternate}
+    .ambient i:nth-child(2){animation:drift2 34s ease-in-out infinite alternate}
+    .ambient i:nth-child(3){animation:drift1 40s ease-in-out infinite alternate-reverse}
+  }
+  @keyframes slide{to{transform:translateX(-50%)}}
+  @keyframes drift1{to{transform:translate(18vw,-14vh) scale(1.15)}}
+  @keyframes drift2{to{transform:translate(-14vw,30vh) scale(.9)}}
+
+  @media (max-width:960px){
+    .links{display:none}
+    .hero-in,.head,.steps-wrap,.about-grid,.sci,.work{grid-template-columns:1fr}
+    .card-id{flex-direction:row; text-align:left; align-items:center}
+    .portrait{width:120px; flex:none}
+    .dirs,.course-grid{grid-template-columns:1fr}
+    .case{grid-template-columns:1fr; padding:26px}
+    .steps-intro,.diss{position:static}
+    .contacts{grid-template-columns:1fr 1fr}
+    .work{padding:32px 24px}
+    .readings{gap:20px}
+    .map{grid-template-columns:1fr}
+    .map-frame{border-radius:26px 26px 0 0; min-height:300px}
+    .dx-pin{grid-template-columns:1fr; grid-template-areas:"head" "fig" "read"; grid-template-rows:auto auto auto; row-gap:14px; align-content:start; padding-block:96px 24px}
+    .dx-head p{font-size:16px}
+    .dx-mm{margin-top:4px}
+    .dx-now{min-height:7.4em}
+  }
+  @media (max-width:640px){
+    .readings{grid-template-columns:1fr; gap:40px; margin-top:56px}
+    .val{font-size:clamp(96px,34vw,150px)}
+    .nav #nav-tg{display:none}
+    .menu{padding-inline:22px}
+    .dx{margin-top:72px}
+    .dx-pin{padding-block:88px 96px; row-gap:10px}
+    .dx-head h2{font-size:28px}
+    .dx-head p{margin-top:8px; font-size:15px; line-height:1.45}
+    .dx-mm{font-size:56px; display:inline-block}
+    .dx-steps{margin-top:14px} .dx-steps li{font-size:12px}
+    .dx-now{margin-top:12px; min-height:7.6em} .dx-now b{font-size:17px} .dx-now p{font-size:15px; line-height:1.45}
+    .dx-note{font-size:13px; margin-top:4px}
+    .dx-svg .lbl-t{font-size:24px} .dx-svg .dim-t{font-size:26px}
+    .sub-block{padding-top:72px}
+    .contacts{grid-template-columns:1fr}
+    .card-id{padding:16px; gap:14px}
+    .portrait{width:92px}
+    .signature{width:170px; margin-inline:0}
+    .bar,.scale{grid-template-columns:78px 1fr 56px; gap:10px}
+    dl.facts,.diss dl{grid-template-columns:1fr}
+    .facts dt{padding-bottom:0; border-bottom:0}
+    .facts dd{padding-top:4px}
+    .timeline li{grid-template-columns:1fr; gap:4px}
+    .panel,.diss{padding:24px}
+    .pub{grid-template-columns:auto minmax(0,1fr); gap:14px} .thumb{width:64px} .thumb.poster{width:72px}
+    .fan-wrap{margin:0 -20px 28px; overflow-x:clip}
+    /* телефон: вкладки внизу экрана, под большим пальцем, все пять видны сразу */
+    body{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 104px)}
+    .tabbar-wrap{position:fixed; top:auto; left:10px; right:10px; bottom:calc(env(safe-area-inset-bottom,0px) + 10px); margin:0; z-index:40}
+    .tabbar{width:100%; overflow:visible; border-radius:22px; padding:5px}
+    .tab-ink{top:5px; bottom:5px; border-radius:17px}
+    .tabbar button{flex:1 1 0; min-width:0; padding:13px 2px; font-size:13px; border-radius:17px; text-align:center}
+    .t-long{display:none} .t-short{display:inline}
+    .stage{padding-top:44px; scroll-margin-top:90px}
+    .tabpanel{scroll-margin-top:90px}
+  }
+  @media (max-width:360px){
+    .tabbar button{font-size:12px; padding-inline:0; letter-spacing:-.01em}
+  }
+</style>
+</head>
+<body>
+
+
+<div class="ambient" aria-hidden="true"><i></i><i></i><i></i></div>
+
+<nav class="nav glass" aria-label="Разделы">
+  <a class="brand" href="#top" aria-label="Наверх">
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="3"/>
+      <g fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"><path d="M31 29V62"/><path d="M48 29V62"/><path d="M65 29V62"/><path d="M25 64H71"/></g>
+      <circle cx="76" cy="71" r="5" fill="currentColor"/>
+    </svg>
+    <span id="nav-handle">dr__shapovalov</span>
+  </a>
+  <div class="links">
+    <a href="#about">Обо мне</a><a href="#directions">Направления</a><a href="#cases">Кейсы</a><a href="#science">Наука</a><a href="#contacts">Контакты</a>
+  </div>
+  <div class="nav-end">
+    <a class="pill" id="nav-tg" href="https://t.me/SHAPOVALOV_DR" target="_blank" rel="noopener">Telegram</a>
+    <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="menu"><span></span><span></span><b class="sr">Меню</b></button>
+  </div>
+</nav>
+
+<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Меню" hidden>
+  <div class="menu-aura" aria-hidden="true"><i></i><i></i><i></i></div>
+  <nav class="menu-in" aria-label="Меню сайта">
+    <a href="#about">Обо мне</a>
+    <a href="#reviews">Отзывы</a>
+    <a href="#distraction">Как растёт кость</a>
+    <div class="menu-group"><a href="#directions">Лечение</a><ul class="menu-sub" id="menu-dirs"></ul></div>
+    <a href="#cases">Кейсы</a>
+    <a href="#science">Наука</a>
+    <a href="#contacts">Контакты</a>
+  </nav>
+  <div class="menu-foot" id="menu-foot"></div>
+</div>
+
+<main class="wrap">
+  <header class="hero" id="top">
+    <div id="waves" aria-hidden="true"></div>
+    <div class="hero-in">
+      <div>
+        <h1 id="h-name"><span class="given">Павел Игоревич</span><b>Шаповалов</b></h1>
+        <p class="lede" id="h-lede"></p>
+        <div class="aud" id="aud" role="radiogroup" aria-label="Кому рассказать">
+          <span class="aud-ink" id="aud-ink" aria-hidden="true"></span>
+          <button type="button" role="radio" data-aud="parents" aria-checked="true">Родителям</button>
+          <button type="button" role="radio" data-aud="colleagues" aria-checked="false">Коллегам</button>
+        </div>
+        <div class="actions">
+          <a class="pill big" id="h-cta" href="#distraction">Как растёт кость →</a>
+          <a class="ghost" id="h-ig" href="https://www.instagram.com/dr__shapovalov/" target="_blank" rel="noopener">Instagram</a>
+        </div>
+      </div>
+      <aside class="card-id glass">
+        <div class="portrait"><img id="h-portrait" src="img/portrait.jpg" alt="Павел Шаповалов" width="560" height="560"></div>
+        <div>
+          <svg class="signature" id="sig" viewBox="0 0 640 213" role="img" aria-label="Dr. Shapovalov">
+            <defs><mask id="sig-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="640" height="213">
+              <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke-width="30" d="M14 15 L84 15"/>
+                <path stroke-width="42" d="M38 74 C10 95 0 135 30 155 C60 172 110 162 128 138 C146 114 120 95 100 78 C75 55 70 25 105 18 C135 12 160 25 152 45 C149 55 138 56 132 52"/>
+                <path stroke-width="30" d="M208 46 C192 80 162 122 142 152"/>
+                <path stroke-width="72" d="M150 96 L172 134 L194 96 L216 134 L238 96"/>
+                <path stroke-width="28" d="M246 118 C240 150 236 172 232 192"/>
+                <path stroke-width="72" d="M250 96 L272 134 L294 96 L316 134 L338 96 L360 134 L382 96 L404 134 L426 96 L448 134 L470 96 L492 134"/>
+                <path stroke-width="28" d="M526 46 C518 80 510 112 504 146"/>
+                <path stroke-width="72" d="M500 96 L522 134 L544 96 L566 134 L588 96 L610 134"/>
+                <path stroke-width="16" d="M16 203 C200 196 420 188 628 186"/>
+              </g></mask></defs>
+            <image href="img/signature-gold.png" width="640" height="213"/>
+          </svg>
+          <p class="id-meta" id="h-card"></p>
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <div class="readings" id="readings"></div>
+
+  <section class="dx" id="distraction" aria-labelledby="dx-h" data-offset="0">
+    <div class="dx-pin">
+      <div class="dx-head"><h2 id="dx-h"></h2><p id="dx-intro"></p></div>
+      <figure class="dx-fig">
+        <svg class="dx-svg" viewBox="60 28 680 382" role="img" aria-labelledby="dx-t">
+          <title id="dx-t">Схема: дистракция нижней челюсти. Задний фрагмент неподвижен, передний отходит вперёд, в щели формируется новая кость.</title>
+          <defs>
+            <linearGradient id="jb" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox"><stop offset="0" stop-color="#f3e9d2"/><stop offset=".55" stop-color="#d9c39b"/><stop offset="1" stop-color="#9d7f50"/></linearGradient>
+            <linearGradient id="jr" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9a7c4e"/><stop offset=".5" stop-color="#dcc69e"/><stop offset="1" stop-color="#efe3c8"/></linearGradient>
+            <radialGradient id="jlight" cx=".55" cy=".35" r=".6"><stop offset="0" stop-color="#fff8e8" stop-opacity=".55"/><stop offset="1" stop-color="#fff8e8" stop-opacity="0"/></radialGradient>
+            <linearGradient id="jen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffdf7"/><stop offset="1" stop-color="#d8cfbc"/></linearGradient>
+            <linearGradient id="jsteel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1f5f6"/><stop offset=".5" stop-color="#aab6ba"/><stop offset="1" stop-color="#6d797d"/></linearGradient>
+            <linearGradient id="jfade" x1="0" y1="0" x2="0" y2="1"><stop offset=".25" stop-color="#000"/><stop offset="1" stop-color="#fff"/></linearGradient>
+            <mask id="jmask" maskUnits="userSpaceOnUse" x="60" y="28" width="760" height="382"><rect x="60" y="28" width="760" height="382" fill="url(#jfade)"/></mask>
+            <pattern id="dx-hatch" width="9" height="12" patternUnits="userSpaceOnUse"><rect width="9" height="12" fill="#0e3b30"/><path d="M2 0 C4 3 0 9 2 12 M6.5 0 C8.5 3 4.5 9 6.5 12" stroke="#4fc39b" stroke-width="1.1" fill="none" opacity=".85"/></pattern>
+            <clipPath id="jcp"><path d="M122 80 C118 62 140 50 162 52 C182 54 190 66 184 80 C180 92 186 104 196 116 C210 134 236 138 252 116 C260 102 263 84 268 64 C280 96 286 150 300 196 C310 212 326 216 345 216 L345 343 C300 340 262 334 238 326 C220 320 206 322 194 316 C168 304 156 286 154 262 C150 220 140 150 132 108 C128 96 124 88 122 80 Z"/></clipPath>
+            <clipPath id="jca"><path d="M345 216 C420 220 520 216 590 198 C600 196 606 196 610 200 C606 222 600 244 604 262 C610 286 626 306 624 330 C622 350 604 362 580 364 C500 366 420 352 345 343 Z"/></clipPath>
+          </defs>
+          <g class="jaw">
+            <g id="dx-post">
+              <path d="M122 80 C118 62 140 50 162 52 C182 54 190 66 184 80 C180 92 186 104 196 116 C210 134 236 138 252 116 C260 102 263 84 268 64 C280 96 286 150 300 196 C310 212 326 216 345 216 L345 343 C300 340 262 334 238 326 C220 320 206 322 194 316 C168 304 156 286 154 262 C150 220 140 150 132 108 C128 96 124 88 122 80 Z" fill="url(#jr)"/>
+              <g clip-path="url(#jcp)">
+                <ellipse cx="160" cy="66" rx="34" ry="22" fill="url(#jlight)"/>
+                <path d="M199.0 314.2 L181.0 306.2 L167.0 290.2 L159.0 260.2 L155.0 218.2 L149.0 168.2 L141.0 118.2 L135.0 94.2 M204.0 312.5 L186.0 304.5 L172.0 288.5 L164.0 258.5 L160.0 216.5 L154.0 166.5 L146.0 116.5 L140.0 92.5 M209.0 310.8 L191.0 302.8 L177.0 286.8 L169.0 256.8 L165.0 214.8 L159.0 164.8 L151.0 114.8 L145.0 90.8 M214.0 309.0 L196.0 301.0 L182.0 285.0 L174.0 255.0 L170.0 213.0 L164.0 163.0 L156.0 113.0 L150.0 89.0 M219.0 307.2 L201.0 299.2 L187.0 283.2 L179.0 253.2 L175.0 211.2 L169.0 161.2 L161.0 111.2 L155.0 87.2 M224.0 305.5 L206.0 297.5 L192.0 281.5 L184.0 251.5 L180.0 209.5 L174.0 159.5 L166.0 109.5 L160.0 85.5 M229.0 303.8 L211.0 295.8 L197.0 279.8 L189.0 249.8 L185.0 207.8 L179.0 157.8 L171.0 107.8 L165.0 83.8 M234.0 302.0 L216.0 294.0 L202.0 278.0 L194.0 248.0 L190.0 206.0 L184.0 156.0 L176.0 106.0 L170.0 82.0 M239.0 300.2 L221.0 292.2 L207.0 276.2 L199.0 246.2 L195.0 204.2 L189.0 154.2 L181.0 104.2 L175.0 80.2 M244.0 298.5 L226.0 290.5 L212.0 274.5 L204.0 244.5 L200.0 202.5 L194.0 152.5 L186.0 102.5 L180.0 78.5 M249.0 296.8 L231.0 288.8 L217.0 272.8 L209.0 242.8 L205.0 200.8 L199.0 150.8 L191.0 100.8 L185.0 76.8 M254.0 295.0 L236.0 287.0 L222.0 271.0 L214.0 241.0 L210.0 199.0 L204.0 149.0 L196.0 99.0 L190.0 75.0 M259.0 293.2 L241.0 285.2 L227.0 269.2 L219.0 239.2 L215.0 197.2 L209.0 147.2 L201.0 97.2 L195.0 73.2 M264.0 291.5 L246.0 283.5 L232.0 267.5 L224.0 237.5 L220.0 195.5 L214.0 145.5 L206.0 95.5 L200.0 71.5 M269.0 289.8 L251.0 281.8 L237.0 265.8 L229.0 235.8 L225.0 193.8 L219.0 143.8 L211.0 93.8 L205.0 69.8 M274.0 288.0 L256.0 280.0 L242.0 264.0 L234.0 234.0 L230.0 192.0 L224.0 142.0 L216.0 92.0 L210.0 68.0 M279.0 286.2 L261.0 278.2 L247.0 262.2 L239.0 232.2 L235.0 190.2 L229.0 140.2 L221.0 90.2 L215.0 66.2 M200 312.5 C240 321.5 300 334.5 345 337.5 M200 307.0 C240 316.0 300 329.0 345 332.0 M200 301.5 C240 310.5 300 323.5 345 326.5 M200 296.0 C240 305.0 300 318.0 345 321.0 M200 290.5 C240 299.5 300 312.5 345 315.5 M200 285.0 C240 294.0 300 307.0 345 310.0 M200 279.5 C240 288.5 300 301.5 345 304.5 M200 274.0 C240 283.0 300 296.0 345 299.0" class="hatch" mask="url(#jmask)"/>
+                <path d="M176 300 l10 -4 M182 308 l10 -4 M190 314 l10 -4 M170 290 l9 -4" class="rough"/>
+              </g>
+              <path d="M298 196 C318 226 336 244 345 250" class="ridge"/>
+              <path d="M122 80 C118 62 140 50 162 52 C182 54 190 66 184 80 C180 92 186 104 196 116 C210 134 236 138 252 116 C260 102 263 84 268 64 C280 96 286 150 300 196 C310 212 326 216 345 216 L345 343 C300 340 262 334 238 326 C220 320 206 322 194 316 C168 304 156 286 154 262 C150 220 140 150 132 108 C128 96 124 88 122 80 Z" class="outline"/>
+            </g>
+            <rect id="dx-gap" x="345" y="216" width="0" height="127" fill="url(#dx-hatch)"/>
+            <rect id="dx-cons" x="345" y="216" width="0" height="127" fill="url(#jb)" opacity="0"/>
+            <g id="dx-ant">
+              <path d="M345 216 C420 220 520 216 590 198 C600 196 606 196 610 200 C606 222 600 244 604 262 C610 286 626 306 624 330 C622 350 604 362 580 364 C500 366 420 352 345 343 Z" fill="url(#jb)"/>
+              <g clip-path="url(#jca)">
+                <g class="root"><path transform="translate(352 221.2) rotate(0 25.0 0)" d="M3.0 0 C4.0 25.3 8.5 46.0 12.5 46.0 C16.5 46.0 21.0 25.3 22.0 0 M28.0 0 C29.0 27.5 33.5 50.0 37.5 50.0 C41.5 50.0 46.0 27.5 47.0 0"/><path transform="translate(406 221.2) rotate(0 18.0 0)" d="M7.2 0 C8.2 30.8 14.0 56.0 18.0 56.0 C22.0 56.0 27.8 30.8 28.8 0"/><path transform="translate(446 219.7) rotate(2 16.5 0)" d="M6.6 0 C7.6 30.8 12.5 56.0 16.5 56.0 C20.5 56.0 25.4 30.8 26.4 0"/><path transform="translate(483 217.0) rotate(5 15.0 0)" d="M5.4 0 C6.4 37.4 11.0 68.0 15.0 68.0 C19.0 68.0 23.6 37.4 24.6 0"/><path transform="translate(518 213.0) rotate(10 15.0 0)" d="M7.2 0 C8.2 28.6 11.0 52.0 15.0 52.0 C19.0 52.0 21.8 28.6 22.8 0"/><path transform="translate(552 207.0) rotate(15 16.0 0)" d="M7.7 0 C8.7 28.6 12.0 52.0 16.0 52.0 C20.0 52.0 23.3 28.6 24.3 0"/></g>
+                <ellipse cx="600" cy="318" rx="26" ry="34" fill="url(#jlight)"/>
+                <ellipse cx="480" cy="236" rx="140" ry="26" fill="url(#jlight)" opacity=".6"/>
+                <path d="M580.0 358.8 L576.0 358.9 L572.0 358.9 L568.0 359.0 L564.0 359.0 L560.0 359.0 L556.0 358.9 L552.0 358.9 L548.0 358.8 L544.0 358.7 L540.0 358.6 L536.0 358.4 L532.0 358.2 L528.1 358.1 L524.1 357.9 L520.1 357.6 L516.1 357.4 L512.1 357.1 L508.1 356.8 L504.2 356.6 L500.2 356.2 L496.2 355.9 L492.2 355.6 L488.3 355.2 L484.3 354.9 L480.4 354.5 L476.4 354.1 L472.5 353.7 L468.5 353.3 L464.6 352.9 L460.6 352.4 L456.7 352.0 L452.8 351.5 L448.8 351.1 L444.9 350.6 L441.0 350.1 L437.1 349.7 L433.2 349.2 L429.3 348.7 L425.4 348.2 L421.5 347.7 L417.6 347.2 L413.7 346.7 L409.8 346.2 L406.0 345.7 L402.1 345.2 L398.3 344.6 L394.4 344.1 L390.6 343.6 L386.7 343.1 L382.9 342.6 L379.1 342.1 L375.3 341.6 L371.4 341.1 L367.6 340.6 L363.9 340.1 L360.1 339.7 L356.3 339.2 L352.5 338.7 L348.8 338.3 L345.0 337.8 M580.0 353.6 L576.0 353.7 L572.0 353.7 L568.0 353.8 L564.0 353.8 L560.0 353.8 L556.0 353.7 L552.0 353.7 L548.0 353.6 L544.0 353.5 L540.0 353.4 L536.0 353.2 L532.0 353.0 L528.1 352.9 L524.1 352.7 L520.1 352.4 L516.1 352.2 L512.1 351.9 L508.1 351.6 L504.2 351.4 L500.2 351.0 L496.2 350.7 L492.2 350.4 L488.3 350.0 L484.3 349.7 L480.4 349.3 L476.4 348.9 L472.5 348.5 L468.5 348.1 L464.6 347.7 L460.6 347.2 L456.7 346.8 L452.8 346.3 L448.8 345.9 L444.9 345.4 L441.0 344.9 L437.1 344.5 L433.2 344.0 L429.3 343.5 L425.4 343.0 L421.5 342.5 L417.6 342.0 L413.7 341.5 L409.8 341.0 L406.0 340.5 L402.1 340.0 L398.3 339.4 L394.4 338.9 L390.6 338.4 L386.7 337.9 L382.9 337.4 L379.1 336.9 L375.3 336.4 L371.4 335.9 L367.6 335.4 L363.9 334.9 L360.1 334.5 L356.3 334.0 L352.5 333.5 L348.8 333.1 L345.0 332.6 M580.0 348.4 L576.0 348.5 L572.0 348.5 L568.0 348.6 L564.0 348.6 L560.0 348.6 L556.0 348.5 L552.0 348.5 L548.0 348.4 L544.0 348.3 L540.0 348.2 L536.0 348.0 L532.0 347.8 L528.1 347.7 L524.1 347.5 L520.1 347.2 L516.1 347.0 L512.1 346.7 L508.1 346.4 L504.2 346.2 L500.2 345.8 L496.2 345.5 L492.2 345.2 L488.3 344.8 L484.3 344.5 L480.4 344.1 L476.4 343.7 L472.5 343.3 L468.5 342.9 L464.6 342.5 L460.6 342.0 L456.7 341.6 L452.8 341.1 L448.8 340.7 L444.9 340.2 L441.0 339.7 L437.1 339.3 L433.2 338.8 L429.3 338.3 L425.4 337.8 L421.5 337.3 L417.6 336.8 L413.7 336.3 L409.8 335.8 L406.0 335.3 L402.1 334.8 L398.3 334.2 L394.4 333.7 L390.6 333.2 L386.7 332.7 L382.9 332.2 L379.1 331.7 L375.3 331.2 L371.4 330.7 L367.6 330.2 L363.9 329.7 L360.1 329.3 L356.3 328.8 L352.5 328.3 L348.8 327.9 L345.0 327.4 M580.0 343.2 L576.0 343.3 L572.0 343.3 L568.0 343.4 L564.0 343.4 L560.0 343.4 L556.0 343.3 L552.0 343.3 L548.0 343.2 L544.0 343.1 L540.0 343.0 L536.0 342.8 L532.0 342.6 L528.1 342.5 L524.1 342.3 L520.1 342.0 L516.1 341.8 L512.1 341.5 L508.1 341.2 L504.2 341.0 L500.2 340.6 L496.2 340.3 L492.2 340.0 L488.3 339.6 L484.3 339.3 L480.4 338.9 L476.4 338.5 L472.5 338.1 L468.5 337.7 L464.6 337.3 L460.6 336.8 L456.7 336.4 L452.8 335.9 L448.8 335.5 L444.9 335.0 L441.0 334.5 L437.1 334.1 L433.2 333.6 L429.3 333.1 L425.4 332.6 L421.5 332.1 L417.6 331.6 L413.7 331.1 L409.8 330.6 L406.0 330.1 L402.1 329.6 L398.3 329.0 L394.4 328.5 L390.6 328.0 L386.7 327.5 L382.9 327.0 L379.1 326.5 L375.3 326.0 L371.4 325.5 L367.6 325.0 L363.9 324.5 L360.1 324.1 L356.3 323.6 L352.5 323.1 L348.8 322.7 L345.0 322.2 M580.0 338.0 L576.0 338.1 L572.0 338.1 L568.0 338.2 L564.0 338.2 L560.0 338.2 L556.0 338.1 L552.0 338.1 L548.0 338.0 L544.0 337.9 L540.0 337.8 L536.0 337.6 L532.0 337.4 L528.1 337.3 L524.1 337.1 L520.1 336.8 L516.1 336.6 L512.1 336.3 L508.1 336.0 L504.2 335.8 L500.2 335.4 L496.2 335.1 L492.2 334.8 L488.3 334.4 L484.3 334.1 L480.4 333.7 L476.4 333.3 L472.5 332.9 L468.5 332.5 L464.6 332.1 L460.6 331.6 L456.7 331.2 L452.8 330.7 L448.8 330.3 L444.9 329.8 L441.0 329.3 L437.1 328.9 L433.2 328.4 L429.3 327.9 L425.4 327.4 L421.5 326.9 L417.6 326.4 L413.7 325.9 L409.8 325.4 L406.0 324.9 L402.1 324.4 L398.3 323.8 L394.4 323.3 L390.6 322.8 L386.7 322.3 L382.9 321.8 L379.1 321.3 L375.3 320.8 L371.4 320.3 L367.6 319.8 L363.9 319.3 L360.1 318.9 L356.3 318.4 L352.5 317.9 L348.8 317.5 L345.0 317.0 M580.0 332.8 L576.0 332.9 L572.0 332.9 L568.0 333.0 L564.0 333.0 L560.0 333.0 L556.0 332.9 L552.0 332.9 L548.0 332.8 L544.0 332.7 L540.0 332.6 L536.0 332.4 L532.0 332.2 L528.1 332.1 L524.1 331.9 L520.1 331.6 L516.1 331.4 L512.1 331.1 L508.1 330.8 L504.2 330.6 L500.2 330.2 L496.2 329.9 L492.2 329.6 L488.3 329.2 L484.3 328.9 L480.4 328.5 L476.4 328.1 L472.5 327.7 L468.5 327.3 L464.6 326.9 L460.6 326.4 L456.7 326.0 L452.8 325.5 L448.8 325.1 L444.9 324.6 L441.0 324.1 L437.1 323.7 L433.2 323.2 L429.3 322.7 L425.4 322.2 L421.5 321.7 L417.6 321.2 L413.7 320.7 L409.8 320.2 L406.0 319.7 L402.1 319.2 L398.3 318.6 L394.4 318.1 L390.6 317.6 L386.7 317.1 L382.9 316.6 L379.1 316.1 L375.3 315.6 L371.4 315.1 L367.6 314.6 L363.9 314.1 L360.1 313.7 L356.3 313.2 L352.5 312.7 L348.8 312.3 L345.0 311.8 M580.0 327.6 L576.0 327.7 L572.0 327.7 L568.0 327.8 L564.0 327.8 L560.0 327.8 L556.0 327.7 L552.0 327.7 L548.0 327.6 L544.0 327.5 L540.0 327.4 L536.0 327.2 L532.0 327.0 L528.1 326.9 L524.1 326.7 L520.1 326.4 L516.1 326.2 L512.1 325.9 L508.1 325.6 L504.2 325.4 L500.2 325.0 L496.2 324.7 L492.2 324.4 L488.3 324.0 L484.3 323.7 L480.4 323.3 L476.4 322.9 L472.5 322.5 L468.5 322.1 L464.6 321.7 L460.6 321.2 L456.7 320.8 L452.8 320.3 L448.8 319.9 L444.9 319.4 L441.0 318.9 L437.1 318.5 L433.2 318.0 L429.3 317.5 L425.4 317.0 L421.5 316.5 L417.6 316.0 L413.7 315.5 L409.8 315.0 L406.0 314.5 L402.1 314.0 L398.3 313.4 L394.4 312.9 L390.6 312.4 L386.7 311.9 L382.9 311.4 L379.1 310.9 L375.3 310.4 L371.4 309.9 L367.6 309.4 L363.9 308.9 L360.1 308.5 L356.3 308.0 L352.5 307.5 L348.8 307.1 L345.0 306.6 M580.0 322.4 L576.0 322.5 L572.0 322.5 L568.0 322.6 L564.0 322.6 L560.0 322.6 L556.0 322.5 L552.0 322.5 L548.0 322.4 L544.0 322.3 L540.0 322.2 L536.0 322.0 L532.0 321.8 L528.1 321.7 L524.1 321.5 L520.1 321.2 L516.1 321.0 L512.1 320.7 L508.1 320.4 L504.2 320.2 L500.2 319.8 L496.2 319.5 L492.2 319.2 L488.3 318.8 L484.3 318.5 L480.4 318.1 L476.4 317.7 L472.5 317.3 L468.5 316.9 L464.6 316.5 L460.6 316.0 L456.7 315.6 L452.8 315.1 L448.8 314.7 L444.9 314.2 L441.0 313.7 L437.1 313.3 L433.2 312.8 L429.3 312.3 L425.4 311.8 L421.5 311.3 L417.6 310.8 L413.7 310.3 L409.8 309.8 L406.0 309.3 L402.1 308.8 L398.3 308.2 L394.4 307.7 L390.6 307.2 L386.7 306.7 L382.9 306.2 L379.1 305.7 L375.3 305.2 L371.4 304.7 L367.6 304.2 L363.9 303.7 L360.1 303.3 L356.3 302.8 L352.5 302.3 L348.8 301.9 L345.0 301.4 M580.0 317.2 L576.0 317.3 L572.0 317.3 L568.0 317.4 L564.0 317.4 L560.0 317.4 L556.0 317.3 L552.0 317.3 L548.0 317.2 L544.0 317.1 L540.0 317.0 L536.0 316.8 L532.0 316.6 L528.1 316.5 L524.1 316.3 L520.1 316.0 L516.1 315.8 L512.1 315.5 L508.1 315.2 L504.2 315.0 L500.2 314.6 L496.2 314.3 L492.2 314.0 L488.3 313.6 L484.3 313.3 L480.4 312.9 L476.4 312.5 L472.5 312.1 L468.5 311.7 L464.6 311.3 L460.6 310.8 L456.7 310.4 L452.8 309.9 L448.8 309.5 L444.9 309.0 L441.0 308.5 L437.1 308.1 L433.2 307.6 L429.3 307.1 L425.4 306.6 L421.5 306.1 L417.6 305.6 L413.7 305.1 L409.8 304.6 L406.0 304.1 L402.1 303.6 L398.3 303.0 L394.4 302.5 L390.6 302.0 L386.7 301.5 L382.9 301.0 L379.1 300.5 L375.3 300.0 L371.4 299.5 L367.6 299.0 L363.9 298.5 L360.1 298.1 L356.3 297.6 L352.5 297.1 L348.8 296.7 L345.0 296.2 M580.0 312.0 L576.0 312.1 L572.0 312.1 L568.0 312.2 L564.0 312.2 L560.0 312.2 L556.0 312.1 L552.0 312.1 L548.0 312.0 L544.0 311.9 L540.0 311.8 L536.0 311.6 L532.0 311.4 L528.1 311.3 L524.1 311.1 L520.1 310.8 L516.1 310.6 L512.1 310.3 L508.1 310.0 L504.2 309.8 L500.2 309.4 L496.2 309.1 L492.2 308.8 L488.3 308.4 L484.3 308.1 L480.4 307.7 L476.4 307.3 L472.5 306.9 L468.5 306.5 L464.6 306.1 L460.6 305.6 L456.7 305.2 L452.8 304.7 L448.8 304.3 L444.9 303.8 L441.0 303.3 L437.1 302.9 L433.2 302.4 L429.3 301.9 L425.4 301.4 L421.5 300.9 L417.6 300.4 L413.7 299.9 L409.8 299.4 L406.0 298.9 L402.1 298.4 L398.3 297.8 L394.4 297.3 L390.6 296.8 L386.7 296.3 L382.9 295.8 L379.1 295.3 L375.3 294.8 L371.4 294.3 L367.6 293.8 L363.9 293.3 L360.1 292.9 L356.3 292.4 L352.5 291.9 L348.8 291.5 L345.0 291.0 M580.0 306.8 L576.0 306.9 L572.0 306.9 L568.0 307.0 L564.0 307.0 L560.0 307.0 L556.0 306.9 L552.0 306.9 L548.0 306.8 L544.0 306.7 L540.0 306.6 L536.0 306.4 L532.0 306.2 L528.1 306.1 L524.1 305.9 L520.1 305.6 L516.1 305.4 L512.1 305.1 L508.1 304.8 L504.2 304.6 L500.2 304.2 L496.2 303.9 L492.2 303.6 L488.3 303.2 L484.3 302.9 L480.4 302.5 L476.4 302.1 L472.5 301.7 L468.5 301.3 L464.6 300.9 L460.6 300.4 L456.7 300.0 L452.8 299.5 L448.8 299.1 L444.9 298.6 L441.0 298.1 L437.1 297.7 L433.2 297.2 L429.3 296.7 L425.4 296.2 L421.5 295.7 L417.6 295.2 L413.7 294.7 L409.8 294.2 L406.0 293.7 L402.1 293.2 L398.3 292.6 L394.4 292.1 L390.6 291.6 L386.7 291.1 L382.9 290.6 L379.1 290.1 L375.3 289.6 L371.4 289.1 L367.6 288.6 L363.9 288.1 L360.1 287.7 L356.3 287.2 L352.5 286.7 L348.8 286.3 L345.0 285.8 M580.0 301.6 L576.0 301.7 L572.0 301.7 L568.0 301.8 L564.0 301.8 L560.0 301.8 L556.0 301.7 L552.0 301.7 L548.0 301.6 L544.0 301.5 L540.0 301.4 L536.0 301.2 L532.0 301.0 L528.1 300.9 L524.1 300.7 L520.1 300.4 L516.1 300.2 L512.1 299.9 L508.1 299.6 L504.2 299.4 L500.2 299.0 L496.2 298.7 L492.2 298.4 L488.3 298.0 L484.3 297.7 L480.4 297.3 L476.4 296.9 L472.5 296.5 L468.5 296.1 L464.6 295.7 L460.6 295.2 L456.7 294.8 L452.8 294.3 L448.8 293.9 L444.9 293.4 L441.0 292.9 L437.1 292.5 L433.2 292.0 L429.3 291.5 L425.4 291.0 L421.5 290.5 L417.6 290.0 L413.7 289.5 L409.8 289.0 L406.0 288.5 L402.1 288.0 L398.3 287.4 L394.4 286.9 L390.6 286.4 L386.7 285.9 L382.9 285.4 L379.1 284.9 L375.3 284.4 L371.4 283.9 L367.6 283.4 L363.9 282.9 L360.1 282.5 L356.3 282.0 L352.5 281.5 L348.8 281.1 L345.0 280.6 M580.0 296.4 L576.0 296.5 L572.0 296.5 L568.0 296.6 L564.0 296.6 L560.0 296.6 L556.0 296.5 L552.0 296.5 L548.0 296.4 L544.0 296.3 L540.0 296.2 L536.0 296.0 L532.0 295.8 L528.1 295.7 L524.1 295.5 L520.1 295.2 L516.1 295.0 L512.1 294.7 L508.1 294.4 L504.2 294.2 L500.2 293.8 L496.2 293.5 L492.2 293.2 L488.3 292.8 L484.3 292.5 L480.4 292.1 L476.4 291.7 L472.5 291.3 L468.5 290.9 L464.6 290.5 L460.6 290.0 L456.7 289.6 L452.8 289.1 L448.8 288.7 L444.9 288.2 L441.0 287.7 L437.1 287.3 L433.2 286.8 L429.3 286.3 L425.4 285.8 L421.5 285.3 L417.6 284.8 L413.7 284.3 L409.8 283.8 L406.0 283.3 L402.1 282.8 L398.3 282.2 L394.4 281.7 L390.6 281.2 L386.7 280.7 L382.9 280.2 L379.1 279.7 L375.3 279.2 L371.4 278.7 L367.6 278.2 L363.9 277.7 L360.1 277.3 L356.3 276.8 L352.5 276.3 L348.8 275.9 L345.0 275.4 M580.0 291.2 L576.0 291.3 L572.0 291.3 L568.0 291.4 L564.0 291.4 L560.0 291.4 L556.0 291.3 L552.0 291.3 L548.0 291.2 L544.0 291.1 L540.0 291.0 L536.0 290.8 L532.0 290.6 L528.1 290.5 L524.1 290.3 L520.1 290.0 L516.1 289.8 L512.1 289.5 L508.1 289.2 L504.2 289.0 L500.2 288.6 L496.2 288.3 L492.2 288.0 L488.3 287.6 L484.3 287.3 L480.4 286.9 L476.4 286.5 L472.5 286.1 L468.5 285.7 L464.6 285.3 L460.6 284.8 L456.7 284.4 L452.8 283.9 L448.8 283.5 L444.9 283.0 L441.0 282.5 L437.1 282.1 L433.2 281.6 L429.3 281.1 L425.4 280.6 L421.5 280.1 L417.6 279.6 L413.7 279.1 L409.8 278.6 L406.0 278.1 L402.1 277.6 L398.3 277.0 L394.4 276.5 L390.6 276.0 L386.7 275.5 L382.9 275.0 L379.1 274.5 L375.3 274.0 L371.4 273.5 L367.6 273.0 L363.9 272.5 L360.1 272.1 L356.3 271.6 L352.5 271.1 L348.8 270.7 L345.0 270.2 M580.0 286.0 L576.0 286.1 L572.0 286.1 L568.0 286.2 L564.0 286.2 L560.0 286.2 L556.0 286.1 L552.0 286.1 L548.0 286.0 L544.0 285.9 L540.0 285.8 L536.0 285.6 L532.0 285.4 L528.1 285.3 L524.1 285.1 L520.1 284.8 L516.1 284.6 L512.1 284.3 L508.1 284.0 L504.2 283.8 L500.2 283.4 L496.2 283.1 L492.2 282.8 L488.3 282.4 L484.3 282.1 L480.4 281.7 L476.4 281.3 L472.5 280.9 L468.5 280.5 L464.6 280.1 L460.6 279.6 L456.7 279.2 L452.8 278.7 L448.8 278.3 L444.9 277.8 L441.0 277.3 L437.1 276.9 L433.2 276.4 L429.3 275.9 L425.4 275.4 L421.5 274.9 L417.6 274.4 L413.7 273.9 L409.8 273.4 L406.0 272.9 L402.1 272.4 L398.3 271.8 L394.4 271.3 L390.6 270.8 L386.7 270.3 L382.9 269.8 L379.1 269.3 L375.3 268.8 L371.4 268.3 L367.6 267.8 L363.9 267.3 L360.1 266.9 L356.3 266.4 L352.5 265.9 L348.8 265.5 L345.0 265.0" class="hatch" mask="url(#jmask)"/>
+              </g>
+              <path d="M345 250 C380 266 420 274 452 280" class="ridge"/>
+              <path d="M590 300 C604 310 612 326 606 344" class="ridge"/>
+              <ellipse cx="474" cy="292" rx="7" ry="5" class="foramen"/>
+              <path d="M345 216 C420 220 520 216 590 198 C600 196 606 196 610 200 C606 222 600 244 604 262 C610 286 626 306 624 330 C622 350 604 362 580 364 C500 366 420 352 345 343 Z" class="outline"/>
+              <g class="teeth"><g transform="translate(352 221.2) rotate(0 25.0 0)"><path class="enamel" d="M0 0 C-2 -10 -1 -21 3 -26 Q10.0 -33 18.0 -27 Q26.0 -34 34.0 -27 Q42.0 -33 47.0 -26 C51.0 -21 52.0 -10 50 0 Z"/><path class="shine" d="M11.0 -6 C9.0 -14 10.0 -20 14.0 -24"/></g><g transform="translate(406 221.2) rotate(0 18.0 0)"><path class="enamel" d="M0 0 C-2 -12 0 -23 10.1 -28 Q18.0 -38 25.9 -28 C36.0 -23 38.0 -12 36 0 Z"/><path class="shine" d="M7.9 -6 C6.5 -14 7.2 -20 10.1 -24"/></g><g transform="translate(446 219.7) rotate(2 16.5 0)"><path class="enamel" d="M0 0 C-2 -12 0 -23 9.2 -28 Q16.5 -38 23.8 -28 C33.0 -23 35.0 -12 33 0 Z"/><path class="shine" d="M7.3 -6 C5.9 -14 6.6 -20 9.2 -24"/></g><g transform="translate(483 217.0) rotate(5 15.0 0)"><path class="enamel" d="M0 0 C-2 -14 2 -28 13.2 -41 L15.6 -43 C18.6 -38 32.0 -26 30 0 Z"/><path class="shine" d="M6.6 -6 C5.4 -14 6.0 -20 8.4 -24"/></g><g transform="translate(518 213.0) rotate(10 15.0 0)"><path class="enamel" d="M0 0 C-1 -14 0 -30 3 -38 C12.0 -40 18.0 -40 27.0 -38 C30.0 -30 31.0 -14 30 0 Z"/><path class="shine" d="M6.6 -6 C5.4 -14 6.0 -20 8.4 -24"/></g><g transform="translate(552 207.0) rotate(15 16.0 0)"><path class="enamel" d="M0 0 C-1 -14 0 -30 3 -38 C12.8 -40 19.2 -40 29.0 -38 C32.0 -30 33.0 -14 32 0 Z"/><path class="shine" d="M7.0 -6 C5.8 -14 6.4 -20 9.0 -24"/></g></g>
+              <g id="dx-plate-a" opacity="0">
+                <rect class="steel" x="312" y="276" width="64" height="11" rx="3"/>
+                <path d="M324 276V287M332 276V287M340 276V287M348 276V287M356 276V287M364 276V287" stroke="#566266" stroke-width="1"/>
+                <rect class="steel" x="366" y="263" width="48" height="37" rx="8"/>
+                <circle class="screw" cx="378" cy="281.5" r="4.6"/><circle class="screw" cx="402" cy="281.5" r="4.6"/>
+              </g>
+            </g>
+            <line id="dx-cut" x1="345" y1="210" x2="345" y2="210" stroke="#f0d48e" stroke-width="2" stroke-dasharray="5 5"/>
+            <g id="dx-dev" opacity="0">
+              <path d="M300 282 L112 330" stroke="url(#jsteel)" stroke-width="6" stroke-linecap="round"/>
+              <g id="dx-knob"><circle class="steel" cx="100" cy="333" r="15"/><path d="M100 320V333" stroke="#a77e34" stroke-width="3" stroke-linecap="round"/></g>
+              <rect class="steel" x="276" y="263" width="48" height="37" rx="8"/>
+              <circle class="screw" cx="288" cy="281.5" r="4.6"/><circle class="screw" cx="312" cy="281.5" r="4.6"/>
+              <rect class="steel" x="298" y="273" width="50" height="17" rx="4"/>
+            </g>
+          </g>
+          <g id="dx-dim" opacity="0">
+            <path class="dim" d="M345 366V388M345 377H357"/>
+            <g id="dx-dim-r"><path class="dim" d="M345 366V388M345 377H333"/></g>
+            <line id="dx-dim-l" class="dim" x1="345" y1="377" x2="345" y2="377"/>
+            <text id="dx-dim-t" class="dim-t" x="345" y="404" text-anchor="middle"></text>
+          </g>
+          <text class="lbl-t" x="150" y="404" text-anchor="middle">ветвь</text>
+          <text class="lbl-t" x="520" y="404" text-anchor="middle" id="dx-lbl-body">челюсть</text>
+        </svg>
+      </figure>
+      <div class="dx-read">
+        <div class="dx-mm"><span id="dx-mm">0,0</span><small>мм</small></div>
+        <ol class="dx-steps" id="dx-steps"></ol>
+        <div class="dx-now" id="dx-now" aria-live="polite"></div>
+        <label class="dx-range" id="dx-range-wrap" hidden><span>Покрутите аппарат</span><input type="range" id="dx-range" min="0" max="1000" value="620"></label>
+        <p class="dx-note" id="dx-note"></p>
+      </div>
+    </div>
+  </section>
+
+  <div class="tabbar-wrap" id="tabbar-wrap">
+    <div class="tabbar glass" id="tabbar" role="tablist" aria-label="Разделы сайта">
+      <span class="tab-ink" id="tab-ink" aria-hidden="true"></span>
+      <button type="button" role="tab" id="tab-about" data-tab="about" aria-controls="about" aria-selected="true">Обо мне</button>
+      <button type="button" role="tab" id="tab-directions" data-tab="directions" aria-controls="directions" aria-selected="false"><span class="t-long">Направления</span><span class="t-short">Лечение</span></button>
+      <button type="button" role="tab" id="tab-cases" data-tab="cases" aria-controls="cases" aria-selected="false">Кейсы</button>
+      <button type="button" role="tab" id="tab-science" data-tab="science" aria-controls="science" aria-selected="false">Наука</button>
+      <button type="button" role="tab" id="tab-contacts" data-tab="contacts" aria-controls="contacts" aria-selected="false">Контакты</button>
+    </div>
+  </div>
+
+  <div class="stage" id="stage">
+    <section class="tabpanel" id="about" role="tabpanel" aria-labelledby="tab-about">
+    <div class="head reveal">
+      <div><h2 id="about-h"></h2></div>
+      <p>Образование, курсы и то, где я работаю сейчас.</p>
+    </div>
+    <div class="about-grid">
+      <div class="panel glass reveal"><p class="intro-text" id="about-text"></p><dl class="facts" id="about-facts"></dl></div>
+      <div class="panel glass reveal"><h3>Образование</h3><ol class="timeline" id="edu"></ol></div>
+      <div class="panel glass courses reveal" id="courses-panel"><h3>Курсы и повышение квалификации</h3><div class="course-grid" id="courses"></div></div>
+    </div>
+    <div class="sub-block reviews" id="reviews">
+      <div class="head reveal"><div><h2 id="rev-h"></h2></div><p id="rev-text"></p></div>
+      <div class="rev-list" id="rev-list"></div>
+    </div>
+    </section>
+
+    <section class="tabpanel" id="directions" role="tabpanel" aria-labelledby="tab-directions" hidden>
+    <div class="head reveal">
+      <div><h2>Чем я <em>занимаюсь</em></h2></div>
+      <p>Термины подчёркнуты пунктиром. Нажмите на любой, чтобы прочитать короткое объяснение.</p>
+    </div>
+    <div class="dirs" id="dirs"></div>
+    </section>
+
+    <section class="tabpanel" id="cases" role="tabpanel" aria-labelledby="tab-cases" hidden>
+    <div class="head reveal">
+      <div><h2>Результат <em>в миллиметрах</em></h2></div>
+      <p>Полосы на графиках отложены в масштабе. Фото «до и после» публикуются только в соцсетях и только с согласия пациентов и их законных представителей.</p>
+    </div>
+    <div class="cases" id="case-list"></div>
+      <div class="sub-block" id="steps">
+    <div class="steps-wrap">
+      <div class="steps-intro reveal">
+        <h2 id="steps-h"></h2>
+        <p id="steps-intro"></p>
+      </div>
+      <ol class="steps glass" id="step-list"></ol>
+    </div>
+      </div>
+    </section>
+
+    <section class="tabpanel" id="science" role="tabpanel" aria-labelledby="tab-science" hidden>
+    <div class="head reveal">
+      <div><h2>Диссертация <em>и статьи</em></h2></div>
+      <p id="sci-intro"></p>
+    </div>
+    <div class="fan-wrap" id="fan-wrap">
+      <div class="fan" id="fan" aria-label="Титульные страницы публикаций"></div>
+      <p class="fan-hint">Нажмите на страницу, чтобы открыть её целиком</p>
+    </div>
+    <div class="sci">
+      <article class="diss glass reveal" id="diss"></article>
+      <div>
+        <div class="tabs reveal" id="sci-tabs" role="tablist" aria-label="Научные работы"></div>
+        <div class="pubs" id="pubs" data-panel="pubs"></div>
+        <div class="pubs" id="talks" data-panel="talks" hidden></div>
+        <div class="pubs" id="soft" data-panel="soft" hidden></div>
+      </div>
+    </div>
+    </section>
+
+    <section class="tabpanel" id="contacts" role="tabpanel" aria-labelledby="tab-contacts" hidden>
+    <div class="head reveal">
+      <div><h2>Где <em>меня найти</em></h2></div>
+      <p>Новые кейсы выходят в Telegram-канале и в Instagram.</p>
+    </div>
+    <div class="contacts" id="contact-list"></div>
+      <div class="sub-block" id="work">
+    <div class="work glass reveal">
+      <div><h2>Где я <em>работаю</em></h2><h3 class="work-name" id="work-h"></h3><p id="work-text"></p></div>
+      <div class="side" id="work-side"></div>
+    </div>
+    <div class="map glass reveal" id="map-card">
+      <div class="map-frame" id="map-frame" data-lenis-prevent>
+        <span class="map-ring" aria-hidden="true"></span>
+        <span class="map-pin" aria-hidden="true"><svg viewBox="0 0 80 104"><path d="M40 2C19 2 3 18 3 39c0 27 37 63 37 63s37-36 37-63C77 18 61 2 40 2z" fill="#0a1513" stroke="currentColor" stroke-width="3"/>
+          <g transform="translate(14 13) scale(.52)" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"><path d="M31 29V62"/><path d="M48 29V62"/><path d="M65 29V62"/><path d="M25 64H71"/></g><circle cx="54" cy="50" r="2.6" fill="currentColor"/></svg></span>
+      </div>
+      <div class="map-info">
+        <b id="map-addr"></b>
+        <p id="map-place"></p>
+        <p class="map-note" id="map-note" role="status" hidden>Здесь карта не встраивается. Откройте её в Яндекс Картах или 2ГИС: кнопки ниже.</p>
+        <div class="map-acts">
+          <button class="pill" id="map-load" type="button">Показать карту</button>
+          <a class="ghost" id="map-ya" target="_blank" rel="noopener">Яндекс Карты ↗</a>
+          <a class="ghost" id="map-2gis" target="_blank" rel="noopener">2ГИС ↗</a>
+        </div>
+      </div>
+    </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <div class="wordmark" aria-label="Shapovalov">S. H. A. P. O. V. A. L. O. V.</div>
+    <div class="foot"><p id="foot-note"></p><span><a href="#top">Наверх ↑</a></span></div>
+  </footer>
+</main>
+
+<div class="tip" id="tip" role="tooltip"></div>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-labelledby="lb-t" hidden>
+  <div class="lb-scrim" data-close></div>
+  <div class="lb-in" id="lb-in" data-lenis-prevent>
+    <figure class="lb-fig" id="lb-fig"></figure>
+    <div class="lb-cap">
+      <b id="lb-t"></b><span id="lb-s"></span>
+      <div class="lb-acts"><a class="pill" id="lb-link" target="_blank" rel="noopener">Открыть статью ↗</a><button class="ghost" id="lb-go" type="button">К публикации в списке</button></div>
+    </div>
+  </div>
+  <button class="lb-x" id="lb-x" type="button" data-close aria-label="Закрыть">×</button>
+</div>
+
+<script src="vendor/three.min.js"></script>
+<script src="vendor/vanta.waves.min.js"></script>
+<script src="vendor/lenis.min.js"></script>
+<script src="vendor/gsap.min.js"></script>
+<script src="vendor/ScrollTrigger.min.js"></script>
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $ = (id) => document.getElementById(id);
+  let PREVIEW = location.hash === '#preview';   // в админке пустые поля видны как «Добавить»
+  let TERMS = {};
+
+  /* ---------- текст из content.json ---------- */
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  // **жирный** и [[ключ|термин]]: термины из словаря открываются по нажатию
+  const rich = (s) => esc(s)
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\[\[([a-z0-9_-]+)\|(.+?)\]\]/gi, (m, k, t) => TERMS[k] ? `<button class="term" type="button" data-term="${k}">${t}</button>` : t);
+  const todo = (what) => PREVIEW ? `<span class="todo">Добавить: ${esc(what)}</span>` : '';
+  const val = (v, what) => (v && String(v).trim()) ? rich(v) : todo(what);
+  const safeUrl = (u) => /^(https?:|#|mailto:|tel:|img\/)/i.test(String(u || '').trim()) ? String(u).trim() : '';
+  const ext = (u) => /^https?:/i.test(u) ? ' target="_blank" rel="noopener"' : '';
+  const num = (s) => parseFloat(String(s).replace(',', '.'));
+
+  let CONTENT = {};
+  function render(c) {
+    CONTENT = c;
+    TERMS = Object.fromEntries((c.terms || []).map((t) => [t.key, t]));
+    const h = c.hero || {};
+    $('h-name').innerHTML = `<span class="given">${esc([h.firstName, h.middleName].filter(Boolean).join(' '))}</span><b>${esc(h.lastName)}</b>`;
+    $('h-card').innerHTML = [h.cardLine1, h.cardLine2].filter(Boolean).map(esc).join('<br>');
+    if (safeUrl(h.portrait)) $('h-portrait').src = safeUrl(h.portrait);
+    const m = c.meta || {};
+    $('nav-handle').textContent = m.handle || '';
+    if (safeUrl(m.telegram)) $('nav-tg').href = safeUrl(m.telegram);
+    if (safeUrl(m.instagram)) $('h-ig').href = safeUrl(m.instagram);
+
+    $('readings').innerHTML = (c.readings || []).map((r) => `
+      <div class="reading reveal"><div class="val">${r.from ? `<span class="count" data-to="${esc(r.from)}">${esc(r.from)}</span> <span class="arr">→</span> ` : ''}<span class="count" data-to="${esc(r.to)}">${esc(r.to)}</span><small>${esc(r.unit)}</small></div><p class="lbl">${rich(r.label)}</p></div>`).join('');
+
+    const dirs = c.directions || [];
+    const mq = `<span>${dirs.map((d) => esc(d.title)).join(' <i></i> ')} <i></i> Работа с ортодонтом <i></i></span>`;
+    if ($('marquee')) $('marquee').innerHTML = mq + mq;
+
+    const a = c.about || {};
+    $('about-h').innerHTML = rich(a.heading);
+    $('about-text').innerHTML = rich(a.text);
+    $('about-facts').innerHTML = (a.facts || []).filter((f) => f.value || PREVIEW).map((f) => `<dt>${esc(f.label)}</dt><dd>${val(f.value, String(f.label).toLowerCase())}</dd>`).join('');
+    $('edu').innerHTML = (a.education || []).filter((e) => e.place || e.degree || PREVIEW).map((e) => `
+      <li><span class="y">${val(e.years, 'годы')}</span><div><b>${val(e.degree, 'ступень')}</b><span>${val(e.place, 'вуз')}</span></div></li>`).join('') || todo('образование');
+    const courses = (a.courses || []).filter((k) => k.title || PREVIEW);
+    $('courses').innerHTML = courses.map((k) => `<div class="course"><span class="y">${val(k.year, 'год')}</span><b>${val(k.title, 'название курса')}</b><span>${val(k.org, 'где проходил')}</span></div>`).join('');
+    $('courses-panel').hidden = !courses.length;
+    const rv = c.reviews || {}, rvl = (rv.links || []).filter((l) => safeUrl(l.url) && l.label);
+    $('rev-h').innerHTML = esc(rv.heading || 'Отзывы').replace(/\*(.+?)\*/g, '<em>$1</em>');
+    $('rev-text').innerHTML = rich(rv.text);
+    $('rev-list').innerHTML = rvl.map((l) => `<a class="rev glass reveal" href="${esc(safeUrl(l.url))}"${ext(l.url)}><div><small>${esc(l.note || 'Отзывы')}</small><b>${esc(l.label)}</b></div><span class="go">Читать отзывы ↗</span></a>`).join('');
+    $('reviews').hidden = !rvl.length;
+
+    $('dirs').innerHTML = dirs.map((d) => {
+      const u = safeUrl(d.link), tag = u ? 'a' : 'div';
+      return `<${tag} class="dir glass reveal"${u ? ` href="${esc(u)}"${ext(u)}` : ''}><h3>${esc(d.title)}</h3>${d.text ? `<p>${rich(d.text)}</p>` : ''}${u && d.linkLabel ? `<span class="go">${esc(d.linkLabel)} →</span>` : ''}</${tag}>`;
+    }).join('');
+
+    $('case-list').innerHTML = (c.cases || []).map((k) => {
+      const max = +k.scaleMax || Math.max(...(k.bars || []).map((b) => +b.value || 0), 1);
+      const ticks = [0, .25, .5, .75, 1].map((f) => `<span>${+(max * f).toFixed(1)}</span>`).join('');
+      const metric = esc(k.metric).replace(/→/g, '<span class="arr">→</span>');
+      return `<article class="case glass reveal" id="${esc(k.id)}">
+        <div class="case-text"><div class="tags">${(k.tags || []).map((t) => `<span class="tag">${esc(t)}</span>`).join('')}</div>
+          <h3>${esc(k.title)}</h3><ul>${(k.points || []).map((p) => `<li>${rich(p)}</li>`).join('')}</ul></div>
+        <div class="viz"><div class="big">${metric}<small>${esc(k.metricUnit)}</small></div><p class="cap">${rich(k.metricCaption)}</p>
+          <div class="bars" role="img" aria-label="${esc((k.bars || []).map((b) => `${b.name} ${b.value} ${b.unit}`).join(', '))}">
+            ${(k.bars || []).map((b) => `<div class="bar"><span class="n">${esc(b.name)}</span><span class="rail"><span class="fill${b.accent ? ' on' : ''}" style="--w:${Math.min(100, (+b.value / max) * 100).toFixed(2)}%"></span></span><span class="v">${esc(String(b.value).replace('.', ','))} ${esc(b.unit)}</span></div>`).join('')}
+            <div class="scale"><span></span><span class="t">${ticks}</span><span></span></div></div></div></article>`;
+    }).join('');
+
+    const s = c.steps || {};
+    $('steps-h').innerHTML = esc(s.heading).replace(/(дистракционного аппарата)/, '<em>$1</em>');
+    $('steps-intro').innerHTML = rich(s.intro);
+    $('step-list').innerHTML = '<span class="rail-y" aria-hidden="true"></span><span class="prog" aria-hidden="true"></span>' +
+      (s.items || []).map((it, i) => `<li class="step"><span class="n">${i + 1}</span><p>${esc(it.title)} <span>${esc(it.detail)}</span></p></li>`).join('');
+
+    const sc = c.science || {}, d = sc.dissertation || {};
+    $('sci-intro').innerHTML = rich(sc.intro);
+    $('diss').innerHTML = `<div class="diss-top"><span class="deg">${esc(d.degree || 'Кандидатская диссертация')}</span><span id="diss-page"></span></div>
+      <h3>${d.title ? esc(d.title) : (todo('название диссертации') || 'Кандидатская диссертация')}</h3>
+      ${d.summary ? `<p class="diss-sum">${rich(d.summary)}</p>` : todo('главный вывод')}
+      <dl>${[['Специальность', d.specialty, 'шифр и название'], ['Руководитель', d.supervisor, 'научный руководитель'], ['Защита', d.year, 'год защиты'], ['Где', d.place, 'где защищена']]
+        .filter(([, v]) => v || PREVIEW).map(([k, v, w]) => `<dt>${k}</dt><dd>${val(v, w)}</dd>`).join('')}</dl>
+      ${safeUrl(d.link) ? `<a class="pill" href="${esc(safeUrl(d.link))}"${ext(d.link)}>Открыть диссертацию →</a>` : todo('ссылку на диссертацию')}
+      ${(sc.profiles || []).length ? `<div class="profiles">${sc.profiles.map((p) => { const u = safeUrl(p.url);
+        return `<${u ? 'a' : 'span'} class="chip"${u ? ` href="${esc(u)}"${ext(u)}` : ''}><small>${esc(p.label)}</small>${esc(p.value)}</${u ? 'a' : 'span'}>`; }).join('')}</div>` : ''}`;
+    const pubs = (sc.publications || []).filter((p) => p.title), talks = (sc.talks || []).filter((t) => t.title), soft = (sc.software || []).filter((t) => t.title);
+    $('sci-tabs').innerHTML = [['pubs', 'Статьи', pubs.length], ['talks', 'Доклады', talks.length], ['soft', 'Программы для ЭВМ', soft.length]]
+      .filter(([, , n]) => n).map(([k, l, n], i) => `<button type="button" role="tab" data-tab="${k}" aria-selected="${i === 0}">${l}<span>${n}</span></button>`).join('');
+    // титульные страницы: веер наверху и миниатюра у каждой работы
+    LB = [];
+    const card = (src) => src.replace(/(\.[a-z]+)$/i, '-card$1');
+    const addLb = (it) => { LB.push(it); return LB.length - 1; };
+    // кнопка завёрнута в обычный блок: растягиваться в сетке может только блок, а кнопка остаётся по размеру страницы
+    const thumb = (k, poster) => `<div class="thumb-cell"><button class="thumb${poster ? ' poster' : ''}" type="button" data-lb="${k}" aria-label="Открыть страницу целиком: ${esc(LB[k].title)}"><img src="${esc(card(LB[k].img))}" data-full="${esc(LB[k].img)}" alt="" loading="lazy"></button></div>`;
+    $('talks').innerHTML = talks.map((t, i) => {
+      const k = safeUrl(t.image) ? addLb({ img: safeUrl(t.image), title: t.title, sub: [t.event, t.type && t.type + ' доклад'].filter(Boolean).join(' · '), panel: 'talks', id: 'talk-' + i, tall: true }) : -1;
+      return `<div class="pub glass" id="talk-${i}">${k >= 0 ? thumb(k, true) : `<span class="num">${esc(t.year)}</span>`}<div><b>${esc(t.title)}</b><span class="au">${esc(t.authors)}</span>
+      <span class="src"><span>${esc(t.event)}</span>${t.type ? `<span class="lnk">${esc(t.type)} доклад</span>` : ''}</span></div></div>`; }).join('');
+    $('soft').innerHTML = soft.map((t, i) => {
+      const k = safeUrl(t.image) ? addLb({ img: safeUrl(t.image), title: t.title, sub: t.number, panel: 'soft', id: 'soft-' + i, fan: true }) : -1;
+      return `<div class="pub glass" id="soft-${i}">${k >= 0 ? thumb(k) : '<span class="num">ЭВМ</span>'}<div><b>${esc(t.title)}</b><span class="au">${esc(t.authors)}</span>
+      <span class="src"><span>${esc(t.number)}</span></span></div></div>`; }).join('');
+    bindTabs();
+    $('pubs').innerHTML = pubs.map((p, i) => {
+      const u = safeUrl(p.link) || (p.doi ? `https://doi.org/${p.doi}` : '');
+      const k = safeUrl(p.image) ? addLb({ img: safeUrl(p.image), title: p.title, sub: p.journal, url: u, panel: 'pubs', id: 'pub-' + i, fan: true }) : -1;
+      return `<article class="pub glass reveal" id="pub-${i}">${k >= 0 ? thumb(k) : `<span class="num">${esc((String(p.journal).match(/(19|20)\d\d/) || [''])[0])}</span>`}
+        <div><b>${esc(p.title)}</b><span class="au">${esc(p.authors)}</span>
+        <span class="src"><span>${esc(p.journal)}</span>${p.doi ? `<span>DOI ${esc(p.doi)}</span>` : ''}${u ? `<a class="lnk" href="${esc(u)}"${ext(u)}>Читать ↗</a>` : ''}</span></div></article>`;
+    }).join('') || todo('статьи');
+    // титульный лист диссертации — в карточке диссертации и первым в веере
+    if (safeUrl(d.image)) {
+      const k = addLb({ img: safeUrl(d.image), title: d.title, sub: [d.degree, d.specialty].filter(Boolean).join(' · '), url: safeUrl(d.link), panel: 'diss', id: 'diss', fan: true });
+      $('diss-page').innerHTML = thumb(k);
+    }
+    // веер: диссертация, статьи по порядку списка, затем свидетельство о регистрации программы
+    const rank = (it) => (it.panel === 'diss' ? 0 : it.panel === 'soft' ? 2 : 1);
+    const fanItems = LB.map((it, k) => [it, k]).filter(([it]) => it.fan).sort((a, b) => rank(a[0]) - rank(b[0]));
+    $('fan').innerHTML = fanItems.map(([it, k], j) => `<button class="fan-card" type="button" data-lb="${k}" data-z="${it.panel === 'diss' ? 40 : j + 1}" style="z-index:${it.panel === 'diss' ? 40 : j + 1}" aria-label="Открыть страницу целиком: ${esc(it.title)}"><img src="${esc(card(it.img))}" data-full="${esc(it.img)}" alt="" loading="lazy"></button>`).join('');
+    $('fan-wrap').hidden = !fanItems.length;
+    document.querySelectorAll('img[data-full]').forEach((im) => im.addEventListener('error', () => { if (im.src.indexOf(im.dataset.full) < 0) im.src = im.dataset.full; }, { once: true }));
+    layoutFan(false);
+
+    const w = c.work || {};
+    $('work-h').innerHTML = esc(w.name).replace(/(«.+»)/, '<em>$1</em>');
+    $('work-text').innerHTML = rich(w.text);
+    $('work-side').innerHTML = (w.links || []).filter((l) => safeUrl(l.url)).map((l) => `<a class="ghost" href="${esc(safeUrl(l.url))}"${ext(l.url)}>${esc(l.label)} →</a>`).join('') +
+      (w.address ? `<span class="ghost" style="cursor:default">${esc(w.address)}</span>` : todo('адрес приёма и как записаться'));
+
+    $('contact-list').innerHTML = (c.contacts || []).filter((k) => k.value || PREVIEW).map((k) => {
+      const u = safeUrl(k.url);
+      return u && k.value ? `<a class="contact glass reveal" href="${esc(u)}"${ext(u)}><small>${esc(k.label)} ↗</small><span>${esc(k.value)}</span></a>`
+        : `<div class="contact glass reveal"><small>${esc(k.label)}</small><span>${val(k.value, k.label)}</span></div>`;
+    }).join('');
+    // меню: направления лечения с цветными шариками, внизу — быстрые контакты
+    $('menu-dirs').innerHTML = dirs.map((d) => `<li><a href="#directions"><span class="orb" aria-hidden="true"></span>${esc(d.title)}</a></li>`).join('');
+    $('menu-foot').innerHTML = (c.contacts || []).filter((k) => safeUrl(k.url) && k.value).slice(0, 4)
+      .map((k) => `<a href="${esc(safeUrl(k.url))}"${ext(k.url)}>${esc(k.value)}</a>`).join('');
+
+    // дистракция
+    const dxc = c.distraction || {};
+    DX = { max: +dxc.maxMm > 0 ? +dxc.maxMm : 15, phases: dxc.phases || [] };
+    $('dx-h').innerHTML = esc(dxc.heading || '').replace(/(кость|кости)$/, '<em>$1</em>');
+    $('dx-note').innerHTML = rich(dxc.note);
+
+    // карта
+    const q = w.mapQuery || w.address || '';
+    $('map-addr').textContent = w.address || '';
+    $('map-place').textContent = w.name || '';
+    $('map-ya').href = 'https://yandex.ru/maps/?text=' + encodeURIComponent(q);
+    $('map-2gis').href = 'https://2gis.ru/moscow/search/' + encodeURIComponent(q);
+    $('map-card').hidden = !q;
+    MAPQ = q;
+
+    applyAud();
+    $('foot-note').textContent = `© ${new Date().getFullYear()} ${[h.firstName, h.middleName, h.lastName].filter(Boolean).join(' ')}. ${(c.footer || {}).note || ''}`;
+    bindTerms();
+    bindGlass();
+  }
+
+  /* ---------- родителям / коллегам ---------- */
+  const AUD_KEY = 'shp-audience';
+  let AUD = 'parents';
+  try { if (localStorage.getItem(AUD_KEY) === 'colleagues') AUD = 'colleagues'; } catch (e) {}
+  const pro = () => AUD === 'colleagues';
+  function placeAudInk() {
+    const b = document.querySelector(`#aud [data-aud="${AUD}"]`), ink = $('aud-ink'); if (!b) return;
+    ink.style.left = b.offsetLeft + 'px'; ink.style.width = b.offsetWidth + 'px';
+  }
+  function applyAud() {
+    const c = CONTENT, h = c.hero || {}, au = c.audience || {}, dxc = c.distraction || {};
+    document.querySelectorAll('#aud button').forEach((b) => {
+      b.setAttribute('aria-checked', String(b.dataset.aud === AUD));
+      const l = b.dataset.aud === 'colleagues' ? au.colleaguesLabel : au.parentsLabel; if (l) b.textContent = l;
+    });
+    placeAudInk();
+    $('h-lede').innerHTML = rich(pro() && h.ledePro ? h.ledePro : h.lede);
+    const cta = (pro() ? au.colleaguesCta : au.parentsCta) || {};
+    if (cta.label && safeUrl(cta.link)) { $('h-cta').textContent = cta.label + ' →'; $('h-cta').href = safeUrl(cta.link); }
+    $('dx-intro').innerHTML = rich(pro() && dxc.introPro ? dxc.introPro : dxc.intro);
+    $('dx-steps').innerHTML = DX.phases.map((ph) => `<li><i><b></b></i>${esc(pro() && ph.titlePro ? ph.titlePro : ph.title)}</li>`).join('');
+    $('dx-lbl-body').textContent = pro() ? 'тело нижней челюсти' : 'челюсть';
+    dxIdx = -1; dxSet(dxP);
+  }
+  function setAud(a) {
+    if (a === AUD) return;
+    AUD = a; try { localStorage.setItem(AUD_KEY, a); } catch (e) {}
+    const els = [$('h-lede'), $('h-cta'), $('dx-intro'), $('dx-now')];
+    if (window.gsap && !reduce) {
+      placeAudInk();
+      gsap.to(els, { autoAlpha: 0, y: -6, duration: 0.16, ease: 'power2.out', onComplete: () => {
+        applyAud(); gsap.fromTo(els, { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: 0.32, stagger: 0.03, ease: 'power3.out', clearProps: 'transform' }); } });
+    } else applyAud();
+  }
+  document.querySelectorAll('#aud button').forEach((b) => b.addEventListener('click', () => setAud(b.dataset.aud)));
+  $('aud').addEventListener('keydown', (e) => {
+    if (!['ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+    e.preventDefault(); const next = AUD === 'parents' ? 'colleagues' : 'parents';
+    setAud(next); document.querySelector(`#aud [data-aud="${next}"]`).focus();
+  });
+  addEventListener('resize', placeAudInk);
+  if (document.fonts) document.fonts.ready.then(placeAudInk);
+
+  /* ---------- дистракция: прокрутка раздвигает фрагменты челюсти ---------- */
+  let DX = { max: 15, phases: [] }, dxIdx = -1, dxP = 0;
+  const fmt1 = (v) => v.toFixed(1).replace('.', ',');
+  function dxSet(p) {
+    dxP = p;
+    const s = (a, b) => Math.max(0, Math.min(1, (p - a) / (b - a)));
+    const cut = s(0, 0.1), dev = s(0.05, 0.15), lat = s(0.1, 0.22), act = s(0.22, 0.82), con = s(0.82, 1);
+    const mm = act * DX.max, dx = act * 90;
+    $('dx-cut').setAttribute('y2', (210 + 139 * cut).toFixed(1));
+    $('dx-dev').setAttribute('opacity', dev.toFixed(3));
+    $('dx-dev').setAttribute('transform', `translate(0 ${((1 - dev) * -14).toFixed(2)})`);
+    $('dx-plate-a').setAttribute('opacity', dev.toFixed(3));
+    $('dx-ant').setAttribute('transform', `translate(${dx.toFixed(2)} 0)`);
+    $('dx-gap').setAttribute('width', dx.toFixed(2)); $('dx-cons').setAttribute('width', dx.toFixed(2));
+    $('dx-cons').setAttribute('opacity', (con * 0.92).toFixed(3));
+    $('dx-knob').setAttribute('transform', `rotate(${(mm * 96).toFixed(1)} 100 333)`);
+    $('dx-dim').setAttribute('opacity', act > 0.02 ? 1 : 0);
+    $('dx-dim-r').setAttribute('transform', `translate(${dx.toFixed(2)} 0)`);
+    $('dx-dim-l').setAttribute('x2', (345 + dx).toFixed(2));
+    $('dx-dim-t').setAttribute('x', (345 + dx / 2).toFixed(2)); $('dx-dim-t').textContent = fmt1(mm) + ' мм';
+    $('dx-mm').textContent = fmt1(mm);
+    const fills = [cut, lat, act, con];
+    document.querySelectorAll('#dx-steps b').forEach((b, i) => b.style.setProperty('--f', fills[i] ?? 0));
+    const idx = p < 0.1 ? 0 : p < 0.22 ? 1 : p < 0.82 ? 2 : 3;
+    if (idx !== dxIdx) {
+      dxIdx = idx; const ph = DX.phases[idx] || {};
+      $('dx-now').innerHTML = `<b>${esc(pro() && ph.titlePro ? ph.titlePro : ph.title)}</b><p>${rich(pro() && ph.textPro ? ph.textPro : ph.text)}</p>`;
+      document.querySelectorAll('#dx-steps li').forEach((li, i) => li.classList.toggle('on', i === idx));
+      bindTerms();
+    }
+  }
+
+  /* ---------- подпись пишется пером ---------- */
+  function writeSignature() {
+    const svg = $('sig'); if (!svg || reduce || !window.gsap) return;
+    const img = svg.querySelector('image'), strokes = [...svg.querySelectorAll('mask path')];
+    img.setAttribute('mask', 'url(#sig-mask)');
+    const tl = gsap.timeline({ delay: 0.6, onComplete: () => img.removeAttribute('mask') });
+    strokes.forEach((p) => {
+      const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L;
+      tl.to(p, { strokeDashoffset: 0, duration: Math.max(0.14, L / 1150), ease: 'none' });
+    });
+  }
+
+  /* ---------- полноэкранное меню ---------- */
+  const menu = $('menu'), burger = $('burger');
+  let menuOpen = false;
+  function openMenu() {
+    if (menuOpen) return; menuOpen = true;
+    burger.setAttribute('aria-expanded', 'true'); burger.querySelector('.sr').textContent = 'Закрыть меню';
+    document.body.classList.add('menu-open'); menu.hidden = false; if (lenis) lenis.stop();
+    const r = burger.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
+    const R = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+    const items = menu.querySelectorAll('.menu-in > a, .menu-group > a, .menu-sub li, .menu-foot');
+    if (window.gsap && !reduce) {
+      gsap.fromTo(menu, { clipPath: `circle(0px at ${x}px ${y}px)` }, { clipPath: `circle(${R}px at ${x}px ${y}px)`, duration: 0.55, ease: 'expo.out', clearProps: 'clipPath' });
+      gsap.fromTo(items, { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: 0.5, stagger: 0.04, delay: 0.08, ease: 'power3.out', clearProps: 'transform' });
+    } else if (window.gsap) gsap.fromTo(menu, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2 });
+    menu.querySelector('a').focus({ preventScroll: true });
+  }
+  function closeMenu(focusBack = true) {
+    if (!menuOpen) return; menuOpen = false;
+    burger.setAttribute('aria-expanded', 'false'); burger.querySelector('.sr').textContent = 'Меню';
+    document.body.classList.remove('menu-open'); if (lenis) lenis.start();
+    const done = () => { menu.hidden = true; if (window.gsap) gsap.set(menu, { clearProps: 'all' }); };
+    if (window.gsap && !reduce) {
+      const r = burger.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
+      gsap.to(menu, { clipPath: `circle(0px at ${x}px ${y}px)`, duration: 0.32, ease: 'power3.out', onComplete: done });
+    } else menu.hidden = true;
+    if (focusBack) burger.focus({ preventScroll: true });
+  }
+  burger.addEventListener('click', () => (menuOpen ? closeMenu() : openMenu()));
+  menu.addEventListener('click', (e) => { if (e.target.closest('a')) closeMenu(false); });
+  document.addEventListener('keydown', (e) => {
+    if (!menuOpen) return;
+    if (e.key === 'Escape') { e.preventDefault(); closeMenu(); return; }
+    if (e.key !== 'Tab') return;
+    const f = [burger, ...menu.querySelectorAll('a')], i = f.indexOf(document.activeElement);
+    if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); }
+    else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
+  });
+
+  /* ---------- карта: грузится только по нажатию ---------- */
+  let MAPQ = '';
+  $('map-load').addEventListener('click', () => {
+    if (!MAPQ) return;
+    const f = document.createElement('iframe');
+    f.src = 'https://yandex.ru/map-widget/v1/?mode=search&z=16&text=' + encodeURIComponent(MAPQ);
+    f.title = 'Карта: ' + MAPQ; f.allowFullscreen = true; f.referrerPolicy = 'strict-origin-when-cross-origin';
+    f.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox');
+    $('map-frame').append(f); $('map-frame').classList.add('on'); $('map-load').hidden = true;
+  });
+  // если страница открыта там, где чужие сайты встраивать запрещено (например, предпросмотр на claude.ai),
+  // браузер блокирует карту — тогда убираем пустое окно и предлагаем открыть карту по ссылке
+  document.addEventListener('securitypolicyviolation', (e) => {
+    if (!/yandex/.test(e.blockedURI || '')) return;
+    const fr = $('map-frame'); fr.querySelector('iframe')?.remove(); fr.classList.remove('on');
+    $('map-note').hidden = false;
+  });
+
+  /* ---------- веер титульных страниц и просмотр целиком ---------- */
+  let LB = [];
+  function fanTargets() {
+    const fan = $('fan'), cards = [...fan.children], n = cards.length; if (!n) return [];
+    const W = fan.clientWidth, cw = cards[0].offsetWidth, mid = (n - 1) / 2;
+    const spread = n > 1 ? Math.min(cw * 0.52, (W - cw * (W < 600 ? 2.2 : 1.5)) / (n - 1)) : 0, step = n > 1 ? Math.min(5.5, (W < 600 ? 30 : 44) / (n - 1)) : 0;
+    return cards.map((c, i) => { const d = i - mid; return { c, x: d * spread, y: d * d * cw * 0.013, r: d * step }; });
+  }
+  function layoutFan(play) {
+    const t = fanTargets(); if (!t.length) return;
+    if (window.gsap) {
+      if (play && !reduce) {
+        gsap.fromTo(t.map((o) => o.c), { xPercent: -50, x: 0, y: 70, rotation: 0, autoAlpha: 0 },
+          { x: (i) => t[i].x, y: (i) => t[i].y, rotation: (i) => t[i].r, autoAlpha: 1, duration: 1, ease: 'power3.out', stagger: { each: 0.06, from: 'center' }, delay: 0.1 });
+      } else t.forEach((o) => gsap.set(o.c, { xPercent: -50, x: o.x, y: o.y, rotation: o.r, autoAlpha: 1 }));
+    } else t.forEach((o) => { o.c.style.transform = `translate(-50%,0) translate(${o.x}px,${o.y}px) rotate(${o.r}deg)`; });
+    t.forEach((o) => { o.c.dataset.y = o.y; });
+  }
+  addEventListener('resize', () => layoutFan(false));
+  $('fan').addEventListener('pointerover', (e) => {
+    const c = e.target.closest('.fan-card'); if (!c || e.pointerType !== 'mouse' || !window.gsap || reduce) return;
+    c.style.zIndex = 60; gsap.to(c, { y: +c.dataset.y - 34, scale: 1.08, duration: 0.28, ease: 'power3.out', overwrite: 'auto' });
+  });
+  $('fan').addEventListener('pointerout', (e) => {
+    const c = e.target.closest('.fan-card'); if (!c || e.pointerType !== 'mouse' || !window.gsap || reduce || c.contains(e.relatedTarget)) return;
+    c.style.zIndex = c.dataset.z; gsap.to(c, { y: +c.dataset.y, scale: 1, duration: 0.3, ease: 'power3.out', overwrite: 'auto' });
+  });
+  function thumbsFx(root) {
+    if (!window.gsap || reduce) return;
+    gsap.fromTo(root.querySelectorAll('.thumb'), { autoAlpha: 0, y: 26, rotation: -14, scale: 0.7 },
+      { autoAlpha: 1, y: 0, rotation: 0, scale: 1, duration: 0.7, stagger: 0.06, delay: 0.45, ease: 'power3.out', clearProps: 'transform' });
+  }
+  let lbItem = null, lbBack = null;
+  function openLb(k, from) {
+    const it = LB[k]; if (!it) return; lbItem = it; lbBack = from || null;
+    const im = new Image(); im.src = it.img; im.alt = 'Страница: ' + it.title; $('lb-fig').replaceChildren(im);
+    $('lb-t').textContent = it.title; $('lb-s').textContent = it.sub || '';
+    $('lb-link').hidden = !it.url; if (it.url) $('lb-link').href = it.url;
+    $('lb').classList.toggle('tall', !!it.tall); $('lb').hidden = false; $('lb-in').scrollTop = 0;
+    if (lenis) lenis.stop();
+    if (window.gsap && !reduce) {
+      gsap.fromTo('.lb-scrim', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.25, ease: 'power2.out' });
+      gsap.fromTo('.lb-fig img', { autoAlpha: 0, y: 30, scale: 0.94 }, { autoAlpha: 1, y: 0, scale: 1, duration: 0.45, ease: 'power3.out' });
+      gsap.fromTo('.lb-cap', { autoAlpha: 0, x: 16 }, { autoAlpha: 1, x: 0, duration: 0.4, delay: 0.08, ease: 'power3.out' });
+    }
+    $('lb-x').focus({ preventScroll: true });
+  }
+  function closeLb(keepScroll) {
+    if ($('lb').hidden) return; $('lb').hidden = true; if (lenis) lenis.start();
+    if (lbBack && !keepScroll) lbBack.focus({ preventScroll: true });
+  }
+  document.addEventListener('click', (e) => {
+    const t = e.target.closest('[data-lb]'); if (t) { e.preventDefault(); openLb(+t.dataset.lb, t); return; }
+    if (e.target.closest('#lb [data-close]')) closeLb();
+  });
+  document.addEventListener('keydown', (e) => {
+    if ($('lb').hidden) return;
+    if (e.key === 'Escape') { e.preventDefault(); closeLb(); }
+    if (e.key === 'Tab') { const f = [$('lb-x'), ...$('lb').querySelectorAll('.lb-acts a:not([hidden]), .lb-acts button')]; const i = f.indexOf(document.activeElement);
+      if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); } else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); } }
+  });
+  $('lb-go').addEventListener('click', () => {
+    const it = lbItem; closeLb(true); if (!it) return;
+    const tab = document.querySelector(`#sci-tabs [data-tab="${it.panel}"]`); if (tab && tab.getAttribute('aria-selected') !== 'true') tab.click();
+    const el = $(it.id); if (!el) return;
+    setTimeout(() => { scrollToEl(el, -170); el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 1800); }, 60);
+  });
+
+  /* ---------- волна Vanta, останавливается за пределами экрана ---------- */
+  let fx = null;
+  const startWaves = () => {
+    if (fx || reduce || !window.VANTA || !window.THREE) return;
+    try {
+      fx = VANTA.WAVES({ el: '#waves', color: 0x0f3a30, shininess: 42, waveHeight: 16, waveSpeed: 0.55, zoom: 0.82,
+        mouseControls: true, touchControls: true, gyroControls: false, minHeight: 200, minWidth: 200, scale: 1, scaleMobile: 1 });
+    } catch (e) { fx = null; }
+  };
+  const stopWaves = () => { if (fx) { fx.destroy(); fx = null; } };
+  if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => e.isIntersecting ? startWaves() : stopWaves(), { threshold: 0.02 }).observe(document.querySelector('.hero'));
+  else startWaves();
+
+  /* ---------- вкладки в разделе «Наука» ---------- */
+  function bindTabs() {
+    const tabs = [...document.querySelectorAll('#sci-tabs button')];
+    tabs.forEach((t) => t.addEventListener('click', () => {
+      tabs.forEach((x) => x.setAttribute('aria-selected', String(x === t)));
+      document.querySelectorAll('[data-panel]').forEach((p) => { p.hidden = p.dataset.panel !== t.dataset.tab; });
+      const shown = document.querySelector(`[data-panel="${t.dataset.tab}"]`);
+      if (window.gsap && !reduce) { gsap.fromTo(shown.children, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: .5, stagger: .05, ease: 'power2.out' }); thumbsFx(shown); }
+      if (window.ScrollTrigger) ScrollTrigger.refresh();
+    }));
+  }
+
+  /* ---------- блик жидкого стекла за указателем ---------- */
+  function bindGlass() {
+    if (reduce || !matchMedia('(hover:hover)').matches) return;
+    document.querySelectorAll('.glass').forEach((el) => {
+      if (el.dataset.glass) return; el.dataset.glass = 1;
+      el.addEventListener('pointermove', (e) => {
+        const r = el.getBoundingClientRect();
+        el.style.setProperty('--mx', `${e.clientX - r.left}px`); el.style.setProperty('--my', `${e.clientY - r.top}px`);
+      });
+    });
+  }
+
+  /* ---------- плавная прокрутка ---------- */
+  const hasGsap = window.gsap && window.ScrollTrigger;
+  let lenis = null;
+  if (!reduce && window.Lenis) {
+    lenis = new Lenis({ anchors: false, allowNestedScroll: true, autoRaf: !hasGsap });
+    if (hasGsap) { lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add((t) => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); }
+  }
+  if (hasGsap) gsap.registerPlugin(ScrollTrigger);
+  const phone = matchMedia('(max-width:640px)');
+  const scrollToEl = (el, offset = -150) => {
+    if (!el) return;
+    if (phone.matches && offset < 0) offset = offset + 60;   // на телефоне вкладки внизу: сверху только шапка
+    // Lenis сам вычитает scroll-margin-top элемента — возвращаем его, чтобы отступ не считался дважды;
+    // resize — высота страницы только что сменилась вместе с вкладкой
+    if (lenis) { lenis.resize(); lenis.scrollTo(el, { offset: offset + (parseFloat(getComputedStyle(el).scrollMarginTop) || 0), duration: 1.1 }); }
+    else scrollTo({ top: el.getBoundingClientRect().top + scrollY + offset, behavior: reduce ? 'auto' : 'smooth' });
+  };
+
+  /* ---------- вкладки разделов ---------- */
+  const tabs = [...document.querySelectorAll('#tabbar [role="tab"]')];
+  const ink = $('tab-ink');
+  let currentTab = 'about', busy = false, stepsFx = false;
+  function placeInk() {
+    const t = tabs.find((x) => x.dataset.tab === currentTab); if (!t) return;
+    ink.style.left = t.offsetLeft + 'px'; ink.style.width = t.offsetWidth + 'px';
+    const bar = $('tabbar');            // прокрутка только внутри панели вкладок, страница не двигается
+    if (bar.scrollWidth > bar.clientWidth) bar.scrollTo({ left: t.offsetLeft - (bar.clientWidth - t.offsetWidth) / 2, behavior: reduce ? 'auto' : 'smooth' });
+  }
+  function panelFx(panel) {
+    if (!hasGsap || reduce) return;
+    gsap.fromTo(panel.querySelectorAll('.reveal'), { autoAlpha: 0, y: 34, scale: 0.985 },
+      { autoAlpha: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.08, ease: 'power3.out', delay: 0.12, clearProps: 'transform' });
+    gsap.fromTo(panel.querySelectorAll('.fill'), { scaleX: 0 }, { scaleX: 1, duration: 1.4, stagger: 0.08, ease: 'expo.out', delay: 0.35 });
+    if (panel.id === 'science') { requestAnimationFrame(() => { layoutFan(true); thumbsFx(panel); }); }
+    if (panel.id === 'cases' && !stepsFx) {
+      stepsFx = true;
+      gsap.fromTo('.steps .prog', { scaleY: 0 }, { scaleY: 1, ease: 'none', scrollTrigger: { trigger: '.steps', start: 'top 70%', end: 'bottom 60%', scrub: true } });
+    }
+  }
+  function openTab(id, focus, scroll = true) {
+    const inn = $(id); if (!inn || busy) return;
+    const target = focus && focus !== inn ? focus : null;
+    if (id === currentTab) { if (scroll) scrollToEl(target || $('stage')); return; }
+    const out = $(currentTab);
+    currentTab = id;
+    tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.tab === id)));
+    placeInk();
+    try { history.replaceState(null, '', '#' + id); } catch (e) {}
+    const swap = () => {
+      out.hidden = true; inn.hidden = false;
+      if (hasGsap && !reduce) {
+        gsap.fromTo(inn, { autoAlpha: 0, y: 26, clipPath: 'inset(0% 0% 100% 0%)' },
+          { autoAlpha: 1, y: 0, clipPath: 'inset(0% 0% 0% 0%)', duration: 0.75, ease: 'power3.out', clearProps: 'clipPath,transform,opacity,visibility', onComplete: () => { busy = false; } });
+        panelFx(inn); ScrollTrigger.refresh();
+      } else busy = false;
+      if (scroll) scrollToEl(target || $('stage'), target ? -170 : -150);
+    };
+    if (hasGsap && !reduce) { busy = true; gsap.to(out, { autoAlpha: 0, y: -14, duration: 0.24, ease: 'power2.in', onComplete: () => { gsap.set(out, { clearProps: 'all' }); swap(); } }); }
+    else swap();
+  }
+  tabs.forEach((t) => t.addEventListener('click', () => openTab(t.dataset.tab)));
+  $('tabbar').addEventListener('keydown', (e) => {
+    const i = tabs.findIndex((t) => t.dataset.tab === currentTab);
+    const j = e.key === 'ArrowRight' ? i + 1 : e.key === 'ArrowLeft' ? i - 1 : -1;
+    if (j >= 0 && j < tabs.length) { e.preventDefault(); tabs[j].focus(); openTab(tabs[j].dataset.tab); }
+  });
+  addEventListener('resize', placeInk);
+  // ссылки #about, #case-1, #steps… открывают нужную вкладку; #top — наверх
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href^="#"]'); if (!a) return;
+    const id = a.getAttribute('href').slice(1);
+    if (!id || id === 'top') { e.preventDefault(); if (lenis) lenis.scrollTo(0, { duration: 1.1 }); else scrollTo({ top: 0, behavior: 'smooth' }); return; }
+    const el = document.getElementById(id); if (!el) return;
+    const panel = el.closest('.tabpanel'); e.preventDefault();
+    if (panel) openTab(panel.id, el); else scrollToEl(el, el.dataset.offset != null ? +el.dataset.offset : -150);
+  });
+
+  function animate() {
+    if (!hasGsap || reduce) return;
+    gsap.utils.toArray('.count').forEach((el) => {
+      const raw = el.dataset.to, to = num(raw); if (isNaN(to)) return;
+      const dec = (raw.split(/[.,]/)[1] || '').length, o = { v: 0 };
+      ScrollTrigger.create({ trigger: el, start: 'top 95%', once: true,
+        onEnter: () => gsap.to(o, { v: to, duration: 1.6, ease: 'power2.out', onUpdate: () => { el.textContent = o.v.toFixed(dec).replace('.', ','); } }) });
+    });
+    gsap.to('.hero-in', { yPercent: -12, autoAlpha: 0.2, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+  }
+  function startDx() {
+    if (hasGsap && !reduce) {
+      ScrollTrigger.create({ trigger: '#distraction', start: 'top top', end: () => '+=' + Math.round(innerHeight * 2.2), pin: true, anticipatePin: 1,
+        invalidateOnRefresh: true, onUpdate: (st) => dxSet(st.progress) });
+    } else {
+      // без анимации: ползунок, который крутит аппарат вручную
+      $('dx-range-wrap').hidden = false;
+      const r = $('dx-range'); r.addEventListener('input', () => dxSet(r.value / 1000)); dxSet(r.value / 1000);
+    }
+  }
+  function startTabs() {
+    let hash = ''; try { hash = decodeURIComponent(location.hash.slice(1)); } catch (e) {}   // битая ссылка вида #% — просто без перехода
+    const el = hash && hash !== 'preview' ? document.getElementById(hash) : null;
+    const panel = el && el.closest('.tabpanel');
+    placeInk();
+    if (panel && panel.id !== 'about') openTab(panel.id, el, true);
+    else if (panel) setTimeout(() => scrollToEl(el === panel ? $('stage') : el), 300);
+    if (hasGsap && !reduce) panelFx($(currentTab));
+  }
+
+  /* ---------- пояснения к терминам ---------- */
+  const tip = $('tip'); let cur = null;
+  const show = (btn) => {
+    const t = TERMS[btn.dataset.term]; if (!t) return;
+    if (cur && cur !== btn) cur.setAttribute('aria-expanded', 'false');
+    cur = btn; tip.innerHTML = '';
+    const b = document.createElement('b'); b.textContent = t.title; tip.append(b, document.createTextNode(t.text));
+    btn.setAttribute('aria-expanded', 'true');
+    const r = btn.getBoundingClientRect(), w = tip.offsetWidth, hh = tip.offsetHeight;
+    let top = r.bottom + 10; if (top + hh > innerHeight - 12) top = Math.max(12, r.top - hh - 10);
+    tip.style.left = Math.min(Math.max(16, r.left + r.width / 2 - w / 2), innerWidth - w - 16) + 'px'; tip.style.top = top + 'px'; tip.classList.add('on');
+  };
+  const hide = () => { tip.classList.remove('on'); if (cur) { cur.setAttribute('aria-expanded', 'false'); cur = null; } };
+  function bindTerms() {
+    document.querySelectorAll('.term').forEach((btn) => {
+      if (btn.dataset.bound) return; btn.dataset.bound = 1;
+      btn.setAttribute('aria-expanded', 'false'); btn.setAttribute('aria-describedby', 'tip');
+      btn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); cur === btn ? hide() : show(btn); });
+      btn.addEventListener('mouseenter', () => { if (matchMedia('(hover:hover)').matches) show(btn); });
+      btn.addEventListener('mouseleave', () => { if (matchMedia('(hover:hover)').matches) hide(); });
+      btn.addEventListener('focus', () => show(btn)); btn.addEventListener('blur', hide);
+    });
+  }
+  document.addEventListener('click', hide);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hide(); });
+  addEventListener('scroll', hide, { passive: true });
+
+  /* ---------- загрузка: content.json; из админки приходит живой предпросмотр ---------- */
+  // живой предпросмотр принимаем только от своей админки: тот же сайт и только из окна-родителя
+  addEventListener('message', (e) => {
+    // в админке предпросмотр изолирован (sandbox, «пустое» происхождение), поэтому сверяем адрес страницы, а не location.origin
+    if (parent === window || e.source !== parent || e.origin !== new URL(location.href).origin) return;
+    if (e.data && e.data.type === 'shapovalov:content' && e.data.content && typeof e.data.content === 'object') { PREVIEW = true; boot(e.data.content); if (hasGsap) ScrollTrigger.refresh(); }
+  });
+  let booted = false;
+  function boot(c) { render(c); if (booted) return; booted = true; animate(); startDx(); startTabs(); writeSignature(); }
+  const ready = () => { if (parent !== window) parent.postMessage({ type: 'shapovalov:ready' }, '*'); };   // в сообщении нет ничего секретного
+  fetch('content.json', { cache: 'no-store' }).then((r) => r.json()).then((c) => { boot(c); ready(); })
+    .catch(() => { if (PREVIEW) return ready();   // предпросмотр получит текст из админки
+      document.body.insertAdjacentHTML('afterbegin', '<p style="position:fixed;z-index:99;bottom:16px;left:16px;right:16px;padding:12px 16px;border-radius:12px;background:#2a2416;color:#e6c987;font-size:14px">Не удалось загрузить content.json. Откройте сайт через веб-сервер, а не как файл.</p>'); });
+})();
+</script>
+
+</body>
+</html>
