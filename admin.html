@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; upgrade-insecure-requests; script-src 'sha256-9/lE1qLPo6YmdBt0Uj8nVX6XJLHJSPpsy7sngsdVqGw='; img-src 'self' data: blob:; connect-src 'self' https://api.github.com https://api-metrika.yandex.net; frame-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; upgrade-insecure-requests; script-src 'sha256-QyPwcMs3NEbQYqE6ZZL3wsC6xu9mfrAMeKTuP0GuO7g='; img-src 'self' data: blob:; connect-src 'self' https://api.github.com https://api-metrika.yandex.net; frame-src 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Админка сайта</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -252,6 +252,7 @@
       F('linkLabel', 'Текст ссылки'), F('link', 'Куда ведёт', 'text', { sub: 'Например #case-1 или https://…' })] },
     { id: 'cases', title: 'Клинические случаи', path: 'cases', list: true, item: 'Случай', titleKey: 'title', fields: [
       F('title', 'Заголовок'), F('id', 'Метка для ссылок', 'text', { sub: 'Латиницей, например case-3' }),
+      F('slug', 'Адрес отдельной страницы', 'text', { sub: 'Латиницей через дефис, например ankiloz-vnchs-u-podrostka → drshapovalov.ru/kejsy/ankiloz-vnchs-u-podrostka/. Страница появится через пару минут после публикации. Пусто — берётся метка для ссылок. Уже опубликованный адрес лучше не менять: старые ссылки перестанут работать' }),
       F('tags', 'Ярлыки', 'strings', { sub: 'Первый ярлык подсвечивается золотом' }),
       F('points', 'Пункты', 'strings', { area: true }),
       F('metric', 'Главная цифра', 'text', { sub: 'Например 21 или 7,93 → 2' }), F('metricUnit', 'Единица'), F('metricCaption', 'Подпись под цифрой'),
