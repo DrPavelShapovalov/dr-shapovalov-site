@@ -43,6 +43,16 @@ h3{font-size:18px;margin:0 0 4px}
 .gal figure{margin:0}
 .gal img{display:block;width:100%;height:auto;border-radius:16px;background:#0d1a17}
 .gal figcaption{margin-top:6px;font-size:14px;color:var(--mist)}
+.zoom{display:block;position:relative;border-radius:16px;overflow:hidden;cursor:zoom-in}
+.zoom img{transition:transform .4s ease}
+.zoom:hover img{transform:scale(1.02)}
+.zoom.sens img{filter:blur(16px) saturate(.35) brightness(.7)}
+.sens-note{position:absolute;left:12px;right:12px;bottom:12px;padding:10px 12px;border-radius:12px;background:rgba(10,21,19,.8);color:var(--ivory);font-size:14px;text-align:center}
+.lb{max-width:min(96vw,1200px);max-height:94vh;padding:12px;border:1px solid var(--line);border-radius:18px;background:#0a1513;color:var(--ivory)}
+.lb::backdrop{background:rgba(3,6,7,.86)}
+.lb img{display:block;max-width:100%;max-height:82vh;margin:0 auto;border-radius:12px}
+.lb p{margin:10px 4px 2px;font-size:15px;color:var(--soft)}
+.lb-x{position:absolute;top:8px;right:8px;width:44px;height:44px;border:0;border-radius:999px;background:rgba(10,21,19,.85);color:var(--ivory);font-size:26px;line-height:1;cursor:pointer;z-index:1}
 .cards{list-style:none;margin:0;padding:0;display:grid;gap:12px}
 .card{display:flex;flex-direction:column;gap:8px;padding:18px;border-radius:18px;border:1px solid var(--line);background:rgba(22,66,54,.25);text-decoration:none;color:var(--ivory)}
 .card:hover{border-color:var(--gold)}

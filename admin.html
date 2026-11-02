@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; upgrade-insecure-requests; script-src 'sha256-QyPwcMs3NEbQYqE6ZZL3wsC6xu9mfrAMeKTuP0GuO7g='; img-src 'self' data: blob:; connect-src 'self' https://api.github.com https://api-metrika.yandex.net; frame-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; upgrade-insecure-requests; script-src 'sha256-OIc5hMO6xJvheUVMmb+/KsxRevZiFTqtT4ykHseJJ5U='; img-src 'self' data: blob:; connect-src 'self' https://api.github.com https://api-metrika.yandex.net; frame-src 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Админка сайта</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -258,7 +258,7 @@
       F('metric', 'Главная цифра', 'text', { sub: 'Например 21 или 7,93 → 2' }), F('metricUnit', 'Единица'), F('metricCaption', 'Подпись под цифрой'),
       F('scaleMax', 'Конец шкалы', 'number', { sub: 'Самое большое значение на оси' }),
       F('bars', 'Полосы графика', 'sublist', { item: 'Полоса', fields: [F('name', 'Название'), F('value', 'Значение', 'number'), F('unit', 'Единица'), F('accent', 'Выделить золотом', 'bool')] }),
-      F('images', 'Фото пациента', 'sublist', { item: 'Фото', fields: [F('src', 'Картинка', 'image'), F('caption', 'Подпись'), F('alt', 'Описание для незрячих')] }),
+      F('images', 'Фото пациента', 'sublist', { item: 'Фото', fields: [F('src', 'Картинка', 'image'), F('caption', 'Подпись'), F('alt', 'Описание для незрячих'), F('sensitive', 'Размыть (фото из операционной)', 'bool')] }),
       F('consent', 'Строка о согласии', 'text', { sub: 'Например: Публикуется с письменного согласия' })] },
     { id: 'steps', title: 'Этапы операции: текст', path: 'steps', fields: [F('heading', 'Заголовок'), F('intro', 'Описание', 'area')] },
     { id: 'stepItems', title: 'Этапы операции: список', path: 'steps.items', list: true, item: 'Этап', titleKey: 'title', fields: [F('title', 'Этап'), F('detail', 'Уточнение (серым)'), F('image', 'Фото этапа', 'image', { sub: 'На сайте размыто, пока посетитель не нажмёт «Показать фото операции»' })] },
