@@ -116,10 +116,18 @@ jobs:
           set +e
           IP=$(dig +short drshapovalov.ru.website.yandexcloud.net | grep -E '^[0-9.]+$' | head -1)
           echo "IP хранилища: $IP"
-          for i in $(seq 1 20); do
-            curl -s -o /dev/null --resolve drshapovalov.ru:443:$IP https://drshapovalov.ru/ && { echo "$(date -u +%H:%M) HTTPS отвечает"; break; }
-            echo "$(date -u +%H:%M) HTTPS ещё нет, сертификат на сервере:"; echo | openssl s_client -connect $IP:443 -servername drshapovalov.ru 2>/dev/null | openssl x509 -noout -subject 2>/dev/null
-            sleep 60
+          IPW=$(dig +short www.drshapovalov.ru.website.yandexcloud.net | grep -E '^[0-9.]+$' | head -1)
+          ok=0
+          for i in $(seq 1 40); do
+            good=1
+            for k in 1 2 3 4 5; do
+              curl -s -o /dev/null --resolve drshapovalov.ru:443:$IP https://drshapovalov.ru/sitemap.xml || good=0
+              curl -s -o /dev/null --resolve www.drshapovalov.ru:443:$IPW https://www.drshapovalov.ru/ || good=0
+            done
+            if [ $good = 1 ]; then ok=$((ok+1)); else ok=0; fi
+            echo "$(date -u +%H:%M) все 10 запросов прошли: $good (подряд: $ok)"
+            [ $ok -ge 3 ] && break
+            sleep 45
           done
           for u in / /kejsy/ /privacy/ /favicon.ico /sitemap.xml /admin.html; do
             curl -s -o /dev/null --resolve drshapovalov.ru:443:$IP -w "https://drshapovalov.ru$u → HTTP %{http_code}, %{content_type}, ssl_verify=%{ssl_verify_result}\n" "https://drshapovalov.ru$u"
