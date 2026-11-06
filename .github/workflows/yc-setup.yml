@@ -1,0 +1,56 @@
+# Переезд сайта в Yandex Cloud (Object Storage). Запускается вручную, по шагам.
+# Ключ сервисного аккаунта — в секрете YC_SA_KEY; в журнал он не выводится.
+name: Yandex Cloud — настройка
+on:
+  workflow_dispatch:
+    inputs:
+      step:
+        description: 'Шаг'
+        required: true
+        default: inspect
+        type: choice
+        options: [inspect]
+permissions:
+  contents: read
+concurrency: { group: yc-setup, cancel-in-progress: false }
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Установить yc CLI
+        run: |
+          curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash -s -- -i "$HOME/yc" -n
+          echo "$HOME/yc/bin" >> "$GITHUB_PATH"
+      - name: Войти сервисным аккаунтом
+        env:
+          YC_SA_KEY: ${{ secrets.YC_SA_KEY }}
+        run: |
+          umask 077
+          printf '%s' "$YC_SA_KEY" > "$RUNNER_TEMP/key.json"
+          python3 -c "import json,sys;k=json.load(open(sys.argv[1]));print('ключ прочитан, поля:', sorted(k.keys()))" "$RUNNER_TEMP/key.json"
+          yc config profile create site >/dev/null
+          yc config set service-account-key "$RUNNER_TEMP/key.json"
+          SA=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1]))['service_account_id'])" "$RUNNER_TEMP/key.json")
+          FOLDER=$(yc iam service-account get "$SA" --format json | python3 -c "import json,sys;print(json.load(sys.stdin)['folder_id'])")
+          yc config set folder-id "$FOLDER"
+          echo "сервисный аккаунт: $SA, каталог: $FOLDER"
+          yc --version
+      - name: Разведка
+        if: inputs.step == 'inspect'
+        run: |
+          set +e
+          echo "== роли каталога"; yc resource-manager folder list-access-bindings "$(yc config get folder-id)"
+          echo "== бакеты"; yc storage bucket list
+          echo "== DNS-зоны"; yc dns zone list
+          echo "== сертификаты"; yc certificate-manager certificate list
+          echo "== текущие DNS-записи домена (REG.RU)"
+          for t in NS SOA A AAAA MX TXT CAA; do echo "-- $t"; dig +short "$t" drshapovalov.ru; done
+          for n in www _acme-challenge _dmarc mail; do echo "-- $n: CNAME/TXT/A"; dig +short CNAME $n.drshapovalov.ru; dig +short TXT $n.drshapovalov.ru; dig +short A $n.drshapovalov.ru; done
+          echo "== справка по командам"
+          yc storage bucket create --help | sed -n '1,80p'
+          yc storage bucket update --help | sed -n '1,120p'
+          yc certificate-manager certificate request --help | sed -n '1,60p'
+          yc dns zone add-records --help | sed -n '1,40p'
+      - name: Убрать ключ
+        if: always()
+        run: rm -f "$RUNNER_TEMP/key.json"
