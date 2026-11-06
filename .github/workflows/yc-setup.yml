@@ -9,7 +9,7 @@ on:
         required: true
         default: inspect
         type: choice
-        options: [inspect, create, deploy, status]
+        options: [inspect, create, deploy, status, https]
 permissions:
   contents: read
 concurrency: { group: yc-setup, cancel-in-progress: false }
@@ -17,6 +17,7 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v5
       - name: Установить yc CLI
         run: |
           curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash -s -- -i "$HOME/yc" -n
@@ -66,6 +67,10 @@ jobs:
           yc dns zone add-records --name drshapovalov-ru \
             --record "@ 600 ANAME drshapovalov.ru.website.yandexcloud.net." \
             --record "www 600 CNAME www.drshapovalov.ru.website.yandexcloud.net."
+          CERT=$(yc certificate-manager certificate get --name drshapovalov-ru --format json | python3 -c "import json,sys;print(json.load(sys.stdin)['id'])")
+          yc dns zone add-records --name drshapovalov-ru \
+            --record "_acme-challenge 600 CNAME $CERT.cm.yandexcloud.net." \
+            --record "_acme-challenge.www 600 CNAME $CERT.cm.yandexcloud.net."
       - name: Выложить файлы сайта в хранилище
         if: inputs.step == 'create' || inputs.step == 'deploy'
         run: |
@@ -86,6 +91,15 @@ jobs:
           curl -s -o /dev/null -w 'index: HTTP %{http_code}, %{content_type}\n' http://drshapovalov.ru.website.yandexcloud.net/
           curl -s -o /dev/null -w 'kejsy: HTTP %{http_code}\n' http://drshapovalov.ru.website.yandexcloud.net/kejsy/
           curl -s -o /dev/null -w 'woff2: HTTP %{http_code}, %{content_type}\n' http://drshapovalov.ru.website.yandexcloud.net/fonts/manrope-cyrillic-84ddfc.woff2
+      - name: Включить HTTPS (когда сертификат выдан)
+        if: inputs.step == 'https'
+        run: |
+          set -x
+          CERT=$(yc certificate-manager certificate get --name drshapovalov-ru --format json | python3 -c "import json,sys;c=json.load(sys.stdin);print(c['id']) if c['status']=='ISSUED' else sys.exit('сертификат ещё не выдан: '+c['status'])")
+          yc storage bucket set-https --help | sed -n '1,30p'
+          yc storage bucket set-https --name drshapovalov.ru --certificate-id "$CERT"
+          yc storage bucket set-https --name www.drshapovalov.ru --certificate-id "$CERT"
+          yc storage bucket get-https --name drshapovalov.ru
       - name: Состояние
         if: inputs.step != 'inspect'
         run: |
