@@ -9,7 +9,7 @@ on:
         required: true
         default: inspect
         type: choice
-        options: [inspect]
+        options: [inspect, create, deploy, status]
 permissions:
   contents: read
 concurrency: { group: yc-setup, cancel-in-progress: false }
@@ -51,6 +51,56 @@ jobs:
           yc storage bucket update --help | sed -n '1,120p'
           yc certificate-manager certificate request --help | sed -n '1,60p'
           yc dns zone add-records --help | sed -n '1,40p'
+      - name: Создать хранилища, DNS-зону и запросить сертификат
+        if: inputs.step == 'create'
+        run: |
+          set -x
+          yc storage bucket get drshapovalov.ru >/dev/null 2>&1 || yc storage bucket create --name drshapovalov.ru --default-storage-class standard --public-read
+          yc storage bucket update --name drshapovalov.ru --public-read --website-settings '{"index": "index.html", "error": "index.html"}' >/dev/null
+          yc storage bucket get www.drshapovalov.ru >/dev/null 2>&1 || yc storage bucket create --name www.drshapovalov.ru --default-storage-class standard --public-read
+          yc storage bucket update --name www.drshapovalov.ru --website-settings '{"redirect_all_requests": {"protocol": "PROTOCOL_HTTPS", "hostname": "drshapovalov.ru"}}' >/dev/null
+          yc certificate-manager certificate get --name drshapovalov-ru >/dev/null 2>&1 || \
+            yc certificate-manager certificate request --name drshapovalov-ru --domains drshapovalov.ru,www.drshapovalov.ru --challenge dns
+          yc dns zone get --name drshapovalov-ru >/dev/null 2>&1 || \
+            yc dns zone create --name drshapovalov-ru --zone drshapovalov.ru. --public-visibility
+          yc dns zone add-records --name drshapovalov-ru \
+            --record "@ 600 ANAME drshapovalov.ru.website.yandexcloud.net." \
+            --record "www 600 CNAME www.drshapovalov.ru.website.yandexcloud.net."
+      - name: Выложить файлы сайта в хранилище
+        if: inputs.step == 'create' || inputs.step == 'deploy'
+        run: |
+          SA=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1]))['service_account_id'])" "$RUNNER_TEMP/key.json")
+          yc iam access-key create --service-account-id "$SA" --description "deploy $GITHUB_RUN_ID" --format json > "$RUNNER_TEMP/ak.json"
+          KID=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1]))['access_key']['id'])" "$RUNNER_TEMP/ak.json")
+          export AWS_ACCESS_KEY_ID=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1]))['access_key']['key_id'])" "$RUNNER_TEMP/ak.json")
+          export AWS_SECRET_ACCESS_KEY=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1]))['secret'])" "$RUNNER_TEMP/ak.json")
+          echo "::add-mask::$AWS_SECRET_ACCESS_KEY"; echo "::add-mask::$AWS_ACCESS_KEY_ID"
+          rm -f "$RUNNER_TEMP/ak.json"
+          export AWS_DEFAULT_REGION=ru-central1
+          command -v aws >/dev/null || pip install -q awscli
+          aws --version
+          aws s3 sync . s3://drshapovalov.ru --endpoint-url https://storage.yandexcloud.net --delete --no-progress \
+            --exclude '.git/*' --exclude '.github/*' --exclude 'README.md' --exclude 'pages.py' --exclude 'CNAME'
+          yc iam access-key delete "$KID"
+          echo "== проверка по адресу хранилища"
+          curl -s -o /dev/null -w 'index: HTTP %{http_code}, %{content_type}\n' http://drshapovalov.ru.website.yandexcloud.net/
+          curl -s -o /dev/null -w 'kejsy: HTTP %{http_code}\n' http://drshapovalov.ru.website.yandexcloud.net/kejsy/
+          curl -s -o /dev/null -w 'woff2: HTTP %{http_code}, %{content_type}\n' http://drshapovalov.ru.website.yandexcloud.net/fonts/manrope-cyrillic-84ddfc.woff2
+      - name: Состояние
+        if: inputs.step != 'inspect'
+        run: |
+          set +e
+          yc storage bucket list
+          yc dns zone list-records --name drshapovalov-ru
+          echo "== сертификат и записи для проверки домена"
+          yc certificate-manager certificate get --name drshapovalov-ru --full --format json | python3 -c "
+          import json,sys
+          c=json.load(sys.stdin); print('статус:', c.get('status'), 'id:', c.get('id'))
+          for ch in c.get('challenges',[]):
+              d=ch.get('dns_challenge') or {}
+              print(ch.get('domain'), ch.get('status'), '|', d.get('name'), d.get('type'), d.get('value'))
+          "
+          echo "== команды для HTTPS"; yc storage bucket --help | sed -n '1,40p'
       - name: Убрать ключ
         if: always()
         run: rm -f "$RUNNER_TEMP/key.json"
