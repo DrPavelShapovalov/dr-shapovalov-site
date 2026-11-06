@@ -95,7 +95,17 @@ jobs:
         if: inputs.step == 'https'
         run: |
           set -x
-          CERT=$(yc certificate-manager certificate get --name drshapovalov-ru --format json | python3 -c "import json,sys;c=json.load(sys.stdin);print(c['id']) if c['status']=='ISSUED' else sys.exit('сертификат ещё не выдан: '+c['status'])")
+          set +x
+          for i in $(seq 1 40); do
+            ST=$(yc certificate-manager certificate get --name drshapovalov-ru --format json | python3 -c "import json,sys;print(json.load(sys.stdin)['status'])")
+            echo "$(date -u +%H:%M) статус сертификата: $ST"
+            [ "$ST" = ISSUED ] && break
+            [ "$ST" = INVALID ] && { echo "проверка домена не прошла"; exit 1; }
+            sleep 60
+          done
+          [ "$ST" = ISSUED ] || { echo "за 40 минут не выдан — запустите шаг https ещё раз позже"; exit 1; }
+          set -x
+          CERT=$(yc certificate-manager certificate get --name drshapovalov-ru --format json | python3 -c "import json,sys;print(json.load(sys.stdin)['id'])")
           yc storage bucket set-https --help | sed -n '1,30p'
           yc storage bucket set-https --name drshapovalov.ru --certificate-id "$CERT"
           yc storage bucket set-https --name www.drshapovalov.ru --certificate-id "$CERT"
