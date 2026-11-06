@@ -9,7 +9,7 @@ on:
         required: true
         default: inspect
         type: choice
-        options: [inspect, create, deploy, status, https]
+        options: [inspect, create, deploy, status, https, verify]
 permissions:
   contents: read
 concurrency: { group: yc-setup, cancel-in-progress: false }
@@ -110,8 +110,20 @@ jobs:
           yc storage bucket set-https --name drshapovalov.ru --certificate-id "$CERT"
           yc storage bucket set-https --name www.drshapovalov.ru --certificate-id "$CERT"
           yc storage bucket get-https --name drshapovalov.ru
+      - name: Проверить HTTPS из облака под своим доменом
+        if: inputs.step == 'verify'
+        run: |
+          IP=$(dig +short drshapovalov.ru.website.yandexcloud.net | grep -E '^[0-9.]+$' | head -1)
+          echo "IP хранилища: $IP"
+          for u in / /kejsy/ /privacy/ /favicon.ico /sitemap.xml /admin.html; do
+            curl -s -o /dev/null --resolve drshapovalov.ru:443:$IP -w "https://drshapovalov.ru$u → HTTP %{http_code}, %{content_type}, ssl_verify=%{ssl_verify_result}\n" "https://drshapovalov.ru$u"
+          done
+          IPW=$(dig +short www.drshapovalov.ru.website.yandexcloud.net | grep -E '^[0-9.]+$' | head -1)
+          curl -s -o /dev/null --resolve www.drshapovalov.ru:443:$IPW -w "https://www.drshapovalov.ru/ → HTTP %{http_code} → %{redirect_url}, ssl_verify=%{ssl_verify_result}\n" https://www.drshapovalov.ru/
+          curl -s -o /dev/null --resolve drshapovalov.ru:80:$IP -w "http://drshapovalov.ru/ → HTTP %{http_code} → %{redirect_url}\n" http://drshapovalov.ru/
+          echo | openssl s_client -connect $IP:443 -servername drshapovalov.ru 2>/dev/null | openssl x509 -noout -subject -issuer -dates -ext subjectAltName
       - name: Состояние
-        if: inputs.step != 'inspect'
+        if: inputs.step != 'inspect' && inputs.step != 'verify'
         run: |
           set +e
           yc storage bucket list
