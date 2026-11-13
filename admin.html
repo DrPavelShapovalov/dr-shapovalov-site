@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; upgrade-insecure-requests; script-src 'sha256-OIc5hMO6xJvheUVMmb+/KsxRevZiFTqtT4ykHseJJ5U='; img-src 'self' data: blob:; connect-src 'self' https://api.github.com https://api-metrika.yandex.net; frame-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; upgrade-insecure-requests; script-src 'sha256-imqibtQ2D3dAlrcQcVw6n+C6pnSLkz8VAXqmQMuUaoA='; img-src 'self' data: blob:; connect-src 'self' https://api.github.com https://api-metrika.yandex.net; frame-src 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Админка сайта</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -268,7 +268,8 @@
     { g: 'Наука' },
     { id: 'diss', title: 'Диссертация', path: 'science.dissertation', fields: [
       F('title', 'Название', 'area'), F('summary', 'Главный вывод', 'area'), F('degree', 'Степень'), F('specialty', 'Специальность', 'text', { sub: 'Шифр и название' }),
-      F('supervisor', 'Научный руководитель'), F('year', 'Защита и присуждение степени'), F('place', 'Где защищена'), F('link', 'Ссылка на диссертацию', 'url'), F('image', 'Титульный лист', 'image')] },
+      F('supervisor', 'Научный руководитель'), F('year', 'Защита и присуждение степени'), F('place', 'Где защищена'), F('link', 'Ссылка на диссертацию', 'url'), F('image', 'Титульный лист', 'image'),
+      F('diploma', 'Фото диплома', 'image', { sub: 'Скан разворота. На сайте раскрывается как книжка под карточкой диссертации' })] },
     { id: 'profiles', title: 'Научные профили', path: 'science.profiles', list: true, item: 'Профиль', titleKey: 'label', fields: [F('label', 'Название', 'text', { sub: 'ORCID, РИНЦ SPIN, ИСТИНА…' }), F('value', 'Номер или ник'), F('url', 'Ссылка', 'url')] },
     { id: 'sciIntro', title: 'Наука: вступление', path: 'science', fields: [F('intro', 'Текст под заголовком', 'area')] },
     { id: 'pubs', title: 'Статьи', path: 'science.publications', list: true, item: 'Статья', titleKey: 'title', fields: [
